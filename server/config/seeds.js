@@ -1,149 +1,129 @@
 const db = require('./connection');
-const { User, Product, Category } = require('../models');
+const { User, Freelancer } = require('../models');
 const cleanDB = require('./cleanDB');
 
 db.once('open', async () => {
-  await cleanDB('Category', 'categories');
-  await cleanDB('Product', 'products');
+  await cleanDB('Freelancer', 'freelancers');
   await cleanDB('User', 'users');
 
-  const categories = await Category.insertMany([
-    { name: 'Food' },
-    { name: 'Household Supplies' },
-    { name: 'Electronics' },
-    { name: 'Books' },
-    { name: 'Toys' }
-  ]);
-
-  console.log('categories seeded');
-
-  const products = await Product.insertMany([
+  const freelancers = await Freelancer.insertMany([
     {
-      name: 'Tin of Cookies',
+      name: 'Amy Smith',
+      service: 'Full Stack Developer',
       description:
-        'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.',
-      image: 'cookie-tin.jpg',
-      category: categories[0]._id,
-      price: 2.99,
-      quantity: 500
+      'A versatile developer skilled in both front-end and back-end technologies, capable of building and maintaining complex web applications.',
+      image: 'freelancer-image.png',
+      price: 60,
+      availability: true,
+      skills: ['HTML', 'CSS', 'JavaScript', 'Node.js', 'React', 'MongoDB']
     },
     {
-      name: 'Canned Coffee',
+      name: 'John Doe',
+      service: 'Front-End Developer',
       description:
-        'Praesent sed lacinia mauris. Nulla congue nibh magna, at feugiat nunc scelerisque quis. Donec iaculis rutrum vulputate. Suspendisse lectus sem, vulputate ac lectus sed, placerat consequat dui.',
-      image: 'canned-coffee.jpg',
-      category: categories[0]._id,
-      price: 1.99,
-      quantity: 500
+      'A front-end developer specializing in building and maintaining responsive websites and web applications.',
+      image: 'freelancer-image.png',
+      price: 40,
+      availability: true,
+      skills: ['HTML', 'CSS', 'JavaScript', 'React', 'Bootstrap']
     },
     {
-      name: 'Toilet Paper',
-      category: categories[1]._id,
+      name: 'Brianna Johnson',
+      service: 'Back-End Developer',
       description:
-        'Donec volutpat erat erat, sit amet gravida justo sodales in. Phasellus tempus euismod urna. Proin ultrices nisi ut ipsum congue, vitae porttitor libero suscipit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam lacinia a nisi non congue.',
-      image: 'toilet-paper.jpg',
-      price: 7.99,
-      quantity: 20
+      'A back-end developer specializing in building and maintaining server-side logic and databases for web applications.',
+      image: 'freelancer-image.png',
+      price: 50,
+      availability: true,
+      skills: ['Node.js', 'Express', 'MongoDB', 'SQL', 'REST APIs', 'GraphQL']
     },
     {
-      name: 'Handmade Soap',
-      category: categories[1]._id,
+      name: 'Mike Williams',
+      service: 'UI/UX Designer',
       description:
-        'Praesent placerat, odio vel euismod venenatis, lectus arcu laoreet felis, et fringilla sapien turpis vestibulum nisl.',
-      image: 'soap.jpg',
-      price: 3.99,
-      quantity: 50
+      'A UI/UX designer specializing in creating user-friendly interfaces and experiences for web and mobile applications.',
+      image: 'freelancer-image.png',
+      price: 45,
+      availability: true,
+      skills: ['Figma', 'Adobe XD', 'Sketch', 'InVision', 'User Research', 'Wireframing']
     },
     {
-      name: 'Set of Wooden Spoons',
-      category: categories[1]._id,
+      name: 'Jessica Brown',
+      service: 'Baby Sitter',
       description:
-        'Vivamus ut turpis in purus pretium mollis. Donec turpis odio, semper vel interdum ut, vulputate at ex. Duis dignissim nisi vel tortor imperdiet finibus. Aenean aliquam sagittis rutrum.',
-      image: 'wooden-spoons.jpg',
-      price: 14.99,
-      quantity: 100
+      'A responsible and caring baby sitter with experience caring for children of all ages.',
+      image: 'freelancer-image.png',
+      price: 35,
+      availability: true,
+      skills: ['Childcare', 'First Aid', 'CPR', 'Cooking', 'Cleaning']
     },
     {
-      name: 'Camera',
-      category: categories[2]._id,
+      name: 'David Wilson',
+      service: 'Gardener',
       description:
-        'Vestibulum risus metus, luctus non tortor quis, tincidunt consectetur ex. Nullam vitae lobortis ligula, ut sagittis massa. Curabitur consectetur, tellus at pulvinar venenatis, erat augue cursus erat, eu ullamcorper eros lectus ultrices ipsum. Integer rutrum, augue vitae auctor venenatis, turpis turpis elementum orci, at sagittis risus mi a leo.',
-      image: 'camera.jpg',
-      price: 399.99,
-      quantity: 30
+      'A skilled gardener with experience maintaining lawns, gardens, and landscapes.',
+      image: 'freelancer-image.png',
+      price: 45,
+      availability: true,
+      skills: ['Lawn Care', 'Planting', 'Pruning', 'Weeding', 'Mulching']
     },
     {
-      name: 'Tablet',
-      category: categories[2]._id,
+      name: 'Sarah Martinez',
+      service: 'House Cleaner',
       description:
-        'In sodales, ipsum quis ultricies porttitor, tellus urna aliquam arcu, eget venenatis purus ligula ut nisi. Fusce ut felis dolor. Mauris justo ante, aliquet non tempus in, tempus ac lorem. Aliquam lacinia dolor eu sem eleifend ultrices. Etiam mattis metus metus. Sed ligula dui, placerat non turpis vitae, suscipit volutpat elit. Phasellus sagittis, diam elementum suscipit fringilla, libero mauris scelerisque ex, ac interdum diam erat non sapien.',
-      image: 'tablet.jpg',
-      price: 199.99,
-      quantity: 30
+      'A thorough and detail-oriented house cleaner with experience cleaning homes, apartments, and offices.',
+      image: 'freelancer-image.png',
+      price: 30,
+      availability: true,
+      skills: ['Cleaning', 'Dusting', 'Vacuuming', 'Mopping', 'Laundry']
     },
     {
-      name: 'Tales at Bedtime',
-      category: categories[3]._id,
+      name: 'Daniel Thompson',
+      service: 'Dog Walker',
       description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ornare diam quis eleifend rutrum. Aliquam nulla est, volutpat non enim nec, pharetra gravida augue. Donec vitae dictum neque. Pellentesque arcu lorem, fringilla non ligula ac, tristique bibendum erat. Ut a semper nibh. Quisque a mi et mi tempor ultricies. Maecenas eu ipsum eu enim hendrerit accumsan at euismod urna.',
-      image: 'bedtime-book.jpg',
-      price: 9.99,
-      quantity: 100
+      'A reliable and trustworthy dog walker with experience walking dogs of all breeds and sizes.',
+      image: 'freelancer-image.png',
+      price: 20,
+      availability: true,
+      skills: ['Dog Walking', 'Pet Sitting', 'Feeding', 'Watering', 'Exercise']
     },
     {
-      name: 'Spinning Top',
-      category: categories[4]._id,
-      description: 'Ut vulputate hendrerit nibh, a placerat elit cursus interdum.',
-      image: 'spinning-top.jpg',
-      price: 1.99,
-      quantity: 1000
+      name: 'Olivia Garcia',
+      service: 'Tutor',
+      description:
+      'An experienced tutor with expertise in a variety of subjects, capable of helping students of all ages.',
+      image: 'freelancer-image.png',
+      price: 40,
+      availability: true,
+      skills: ['Math', 'Science', 'English', 'History', 'Foreign Language']
     },
     {
-      name: 'Set of Plastic Horses',
-      category: categories[4]._id,
+      name: 'William Lee',
+      service: 'Personal Trainer',
       description:
-        'Sed a mauris condimentum, elementum enim in, rhoncus dui. Phasellus lobortis leo odio, sit amet pharetra turpis porta quis.',
-      image: 'plastic-horses.jpg',
-      price: 2.99,
-      quantity: 1000
-    },
-    {
-      name: 'Teddy Bear',
-      category: categories[4]._id,
-      description:
-        'Vestibulum et erat finibus erat suscipit vulputate sed vitae dui. Ut laoreet tellus sit amet justo bibendum ultrices. Donec vitae felis vestibulum, congue augue eu, finibus turpis.',
-      image: 'teddy-bear.jpg',
-      price: 7.99,
-      quantity: 100
-    },
-    {
-      name: 'Alphabet Blocks',
-      category: categories[4]._id,
-      description:
-        'Morbi consectetur viverra urna, eu fringilla turpis faucibus sit amet. Suspendisse potenti. Donec at dui ac sapien eleifend hendrerit vel sit amet lectus.',
-      image: 'alphabet-blocks.jpg',
-      price: 9.99,
-      quantity: 600
+      'A certified personal trainer with experience creating custom workout plans and providing fitness coaching.',
+      image: 'freelancer-image.png',
+      price: 40,
+      availability: true,
+      skills: ['Fitness Training', 'Strength Training', 'Cardio', 'Nutrition', 'Weight Loss']
     }
   ]);
 
-  console.log('products seeded');
+  console.log('freelancers seeded');
 
   await User.create({
-    firstName: 'Pamela',
-    lastName: 'Washington',
+    username: 'Pamela Washington',
     email: 'pamela@testmail.com',
     password: 'password12345',
     orders: [
       {
-        products: [products[0]._id, products[0]._id, products[1]._id]
+        freelancers: [freelancers[0]._id, freelancers[1]._id]
       }
     ]
   });
 
   await User.create({
-    firstName: 'Elijah',
-    lastName: 'Holt',
+    username: 'Elijah Holt',
     email: 'eholt@testmail.com',
     password: 'password12345'
   });
