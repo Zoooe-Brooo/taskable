@@ -1,8 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { ChakraProvider } from '@chakra-ui/react';
-import App from './App';
-
 // import App from './App.jsx';
 // import Home from './pages/Home';
 // import Detail from './pages/Detail';
@@ -46,10 +41,19 @@ import App from './App';
 // 	},
 // ]);
 
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import App from './App';
+import LandingPage from './pages/LandingPage';
+
+const router = createBrowserRouter([
+	{
+		path: '/',
+		element: <App />,
+		children: [{ index: true, element: <LandingPage /> }],
+	},
+]);
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-	<React.StrictMode>
-		<ChakraProvider>
-			<App />
-		</ChakraProvider>
-	</React.StrictMode>
+	<RouterProvider router={router} />
 );

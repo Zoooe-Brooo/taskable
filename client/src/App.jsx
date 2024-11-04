@@ -6,8 +6,6 @@
 // 	createHttpLink,
 // } from '@apollo/client';
 // import { setContext } from '@apollo/client/link/context';
-import React from 'react';
-import { Box, Heading, Text, Button } from '@chakra-ui/react';
 
 // import Nav from './components/Nav';
 // import { StoreProvider } from './utils/GlobalState';
@@ -48,19 +46,18 @@ import { Box, Heading, Text, Button } from '@chakra-ui/react';
 // 	);
 // }
 
+import { ChakraProvider, Box, Flex } from '@chakra-ui/react';
+import { Outlet } from 'react-router-dom';
+
 function App() {
 	return (
-		<Box textAlign="center" py={10} px={6}>
-			<Heading fontSize="4xl" mb={4}>
-				Welcome to Chakra UI
-			</Heading>
-			<Text fontSize="xl" mb={4}>
-				This is a minimal test page using Chakra UI with Vite and React.
-			</Text>
-			<Button colorScheme="teal" size="lg">
-				Click Me
-			</Button>
-		</Box>
+		<ChakraProvider>
+			<Flex direction="column" minH="100vh">
+				<Box flex="1" className="container" p={4}>
+					<Outlet />
+				</Box>
+			</Flex>
+		</ChakraProvider>
 	);
 }
 
