@@ -45,12 +45,16 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import LandingPage from './pages/LandingPage';
+import Explore from './pages/Explore';
 
 const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <App />,
-		children: [{ index: true, element: <LandingPage /> }],
+		children: [
+			{ index: true, element: <LandingPage /> },
+			{ path: 'explore', element: <Explore /> }, 
+		],
 	},
 ]);
 

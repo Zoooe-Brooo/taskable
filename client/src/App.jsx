@@ -48,17 +48,21 @@
 
 import { ChakraProvider, Box, Flex } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
-	return (
-		<ChakraProvider>
-			<Flex direction="column" minH="100vh">
-				<Box flex="1" className="container" p={4}>
-					<Outlet />
-				</Box>
-			</Flex>
-		</ChakraProvider>
-	);
+  return (
+    <ChakraProvider>
+      <Flex direction="column" minH="100vh">
+        <Header />
+        <Box flex="1" mt="60px" p={4}>
+          <Outlet />
+        </Box>
+        <Footer />
+      </Flex>
+    </ChakraProvider>
+  );
 }
 
 export default App;
