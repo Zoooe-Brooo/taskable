@@ -2,8 +2,13 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const productSchema = new Schema({
+const freelancerSchema = new Schema({
   name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  service: {
     type: String,
     required: true,
     trim: true
@@ -19,18 +24,13 @@ const productSchema = new Schema({
     required: true,
     min: 0.99
   },
-  quantity: {
-    type: Number,
-    min: 0,
-    default: 0
+  availability: {
+    type: Boolean,
+    default: true
   },
-  category: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
-  }
+  skills: []
 });
 
-const Product = mongoose.model('Product', productSchema);
+const Freelancer = mongoose.model('Freelancer', freelancerSchema);
 
-module.exports = Product;
+module.exports = Freelancer;
