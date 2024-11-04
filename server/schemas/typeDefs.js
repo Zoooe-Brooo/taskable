@@ -1,31 +1,26 @@
 const typeDefs = `
-  type Category {
+  type User {
     _id: ID
-    name: String
+    username: String!
+    email: String!
+    orders: [Order]
   }
 
-  type Product {
+  type Freelancer {
     _id: ID
-    name: String
+    name: String!
+    service: String!
     description: String
     image: String
-    quantity: Int
-    price: Float
-    category: Category
+    price: Float!
+    availability: Boolean
+    skills: [String]
   }
 
   type Order {
     _id: ID
     purchaseDate: String
-    products: [Product]
-  }
-
-  type User {
-    _id: ID
-    firstName: String
-    lastName: String
-    email: String
-    orders: [Order]
+    freelancers: [Freelancer]
   }
 
   type Checkout {
@@ -38,19 +33,18 @@ const typeDefs = `
   }
 
   type Query {
-    categories: [Category]
-    products(category: ID, name: String): [Product]
-    product(_id: ID!): Product
+    freelancers(name: String!): [Freelancer]
+    freelancer(_id: ID!): Freelancer
     user: User
     order(_id: ID!): Order
-    checkout(products: [ID]!): Checkout
+    checkout(freelancers: [ID]!): Checkout
   }
 
   type Mutation {
     addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
-    addOrder(products: [ID]!): Order
+    addOrder(freelancers: [ID]!): Order
     updateUser(firstName: String, lastName: String, email: String, password: String): User
-    updateProduct(_id: ID!, quantity: Int!): Product
+    updateFreelancer(_id: ID!, quantity: Int!): Freelancer
     login(email: String!, password: String!): Auth
   }
 `;
