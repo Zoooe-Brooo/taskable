@@ -47,6 +47,7 @@ import App from './App';
 import LandingPage from './pages/LandingPage';
 import Explore from './pages/Explore';
 import Checkout from './pages/Checkout';
+import MyProfile from './pages/MyProfile';
 
 const router = createBrowserRouter([
 	{
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
 			{ index: true, element: <LandingPage /> },
 			{ path: 'explore', element: <Explore /> }, 
 			{ path: 'checkout', element: <Checkout /> },
+			{ path: 'my-profile', element: <MyProfile /> },
 		],
 	},
 ]);
