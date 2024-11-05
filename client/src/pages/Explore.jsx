@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Box, Flex, Image, Text, Button } from '@chakra-ui/react';
+import FreelancerProfileModal from '../components/FreelancerProfileModal';
 
 const freelancers = [
   {
@@ -7,6 +9,10 @@ const freelancers = [
     description: 'A versatile developer skilled in both front-end and back-end technologies, capable of building and maintaining complex web applications.',
     image: 'https://via.placeholder.com/150/grey',
     price: 60,
+    rating: 4.5,
+    projectsCompleted: 120,
+    skills: ['JavaScript', 'React', 'Node.js'],
+    signedUpDuration: 3,
   },
   {
     name: 'John Doe',
@@ -14,6 +20,10 @@ const freelancers = [
     description: 'A front-end developer specializing in building and maintaining responsive websites and web applications.',
     image: 'https://via.placeholder.com/150/grey',
     price: 40,
+    rating: 4.2,
+    projectsCompleted: 90,
+    skills: ['JavaScript', 'React', 'CSS'],
+    signedUpDuration: 2,
   },
   {
     name: 'Brianna Johnson',
@@ -21,6 +31,10 @@ const freelancers = [
     description: 'A back-end developer specializing in building and maintaining server-side logic and databases for web applications.',
     image: 'https://via.placeholder.com/150/grey',
     price: 50,
+    rating: 4.8,
+    projectsCompleted: 100,
+    skills: ['Node.js', 'MongoDB', 'Express'],
+    signedUpDuration: 2,
   },
   {
     name: 'Mike Williams',
@@ -28,6 +42,10 @@ const freelancers = [
     description: 'A UI/UX designer specializing in creating user-friendly interfaces and experiences for web and mobile applications.',
     image: 'https://via.placeholder.com/150/grey',
     price: 45,
+    rating: 4.6,
+    projectsCompleted: 80,
+    skills: ['Adobe XD', 'Figma', 'Sketch'],
+    signedUpDuration: 1,
   },
   {
     name: 'Jessica Brown',
@@ -35,6 +53,10 @@ const freelancers = [
     description: 'A responsible and caring baby sitter with experience caring for children of all ages.',
     image: 'https://via.placeholder.com/150/grey',
     price: 35,
+    rating: 4.9,
+    projectsCompleted: 70,
+    skills: ['Childcare', 'First Aid', 'Education'],
+    signedUpDuration: 1,
   },
   {
     name: 'David Wilson',
@@ -42,6 +64,10 @@ const freelancers = [
     description: 'A skilled gardener with experience maintaining lawns, gardens, and landscapes.',
     image: 'https://via.placeholder.com/150/grey',
     price: 45,
+    rating: 4.7,
+    projectsCompleted: 60,
+    skills: ['Gardening', 'Landscaping', 'Plant Care'],
+    signedUpDuration: 1,
   },
   {
     name: 'Sarah Martinez',
@@ -49,6 +75,10 @@ const freelancers = [
     description: 'A thorough and detail-oriented house cleaner with experience cleaning homes, apartments, and offices.',
     image: 'https://via.placeholder.com/150/grey',
     price: 30,
+    rating: 4.8,
+    projectsCompleted: 50,
+    skills: ['Cleaning', 'Organizing', 'Detail-Oriented'],
+    signedUpDuration: 1,
   },
   {
     name: 'Daniel Thompson',
@@ -56,6 +86,10 @@ const freelancers = [
     description: 'A reliable and trustworthy dog walker with experience walking dogs of all breeds and sizes.',
     image: 'https://via.placeholder.com/150/grey',
     price: 20,
+    rating: 4.9,
+    projectsCompleted: 40,
+    skills: ['Dog Walking', 'Leash Training', 'Dog Care'],
+    signedUpDuration: 1,
   },
   {
     name: 'Olivia Garcia',
@@ -63,6 +97,10 @@ const freelancers = [
     description: 'An experienced tutor with expertise in a variety of subjects, capable of helping students of all ages.',
     image: 'https://via.placeholder.com/150/grey',
     price: 40,
+    rating: 4.7,
+    projectsCompleted: 30,
+    skills: ['Tutoring', 'Educational Strategies', 'Subject Expertise'],
+    signedUpDuration: 1,
   },
   {
     name: 'William Lee',
@@ -70,10 +108,24 @@ const freelancers = [
     description: 'A certified personal trainer with experience creating custom workout plans and providing fitness coaching.',
     image: 'https://via.placeholder.com/150/grey',
     price: 40,
+    rating: 4.6,
+    projectsCompleted: 20,
+    skills: ['Fitness Training', 'Nutrition', 'Strength Training'],
+    signedUpDuration: 1,
   }
 ];
 
 const Explore = () => {
+  const [selectedFreelancer, setSelectedFreelancer] = useState(null);
+
+  const handleViewProfile = (freelancer) => {
+    setSelectedFreelancer(freelancer);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedFreelancer(null);
+  };
+
   return (
     <Flex wrap="wrap" justify="center" p={10} bgGradient="linear(to-tl, #3AAFA9, #2B7A78)">
       {freelancers.map((freelancer, index) => (
@@ -85,7 +137,7 @@ const Explore = () => {
           borderRadius="15px"
           m={4}
           p={6}
-          width="45%"
+          width={{ base: '100%', md: '45%' }}
           textAlign="center"
           transition="transform 0.3s ease, box-shadow 0.3s ease"
           _hover={{
@@ -108,9 +160,18 @@ const Explore = () => {
           <Text fontWeight="bold" mb={4}>
             ${freelancer.price}/hr
           </Text>
-          <Button colorScheme="teal">View Profile</Button>
+          <Button colorScheme="teal" onClick={() => handleViewProfile(freelancer)}>
+            View Profile
+          </Button>
         </Box>
       ))}
+      {selectedFreelancer && (
+        <FreelancerProfileModal
+          freelancer={selectedFreelancer}
+          isOpen={!!selectedFreelancer}
+          onClose={handleCloseModal}
+        />
+      )}
     </Flex>
   );
 };

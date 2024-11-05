@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Box, Flex, Link } from '@chakra-ui/react';
+import { Box, Flex, Link, Text } from '@chakra-ui/react';
 
 function Header() {
   const [isVisible, setIsVisible] = useState(true);
   const [opacity, setOpacity] = useState(1);
+  let lastScrollY = window.scrollY;
 
   useEffect(() => {
-    let lastScrollY = window.scrollY;
-
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setOpacity(Math.max(0.5, 1 - currentScrollY / 200));
@@ -41,13 +40,20 @@ function Header() {
       p={4}
       style={{
         backgroundColor: 'var(--primary)',
-        opacity: opacity,
+        opacity: isVisible ? opacity : 0,
         transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
         transition: 'transform 0.3s ease, opacity 0.3s ease',
       }}
     >
       <Flex justify="space-between" align="center">
-        <h1 style={{ color: 'var(--dark)' }}>Taskable</h1>
+        <Text
+          as="h1"
+          style={{ color: 'var(--dark)' }}
+          fontSize="2xl"
+          fontWeight="bold"
+        >
+          Taskable
+        </Text>
         <Flex>
           <Link href="#" color="var(--dark)" mx={2}>
             My Profile
