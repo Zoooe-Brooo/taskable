@@ -12,36 +12,50 @@ import {
 import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
-	const letters = 'T'.split(''); // will try fix this tonight
+	const letters = 'Taskable'.split(''); // will try fix this tonight
 	return (
 		<>
 			<Box
 				bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
 				minH="80vh"
 				color="white"
-				padding="0"
-				py={20}
-				px={10}
 				textAlign="center"
 				borderBottomRightRadius={{ base: '8rem', md: '16rem' }}
 			>
-				<HStack spacing={10} align="center" justify="center">
+				<HStack
+					spacing={10}
+					align="center"
+					justify="center"
+					flexDirection={{ base: 'column', lg: 'row' }}
+				>
 					{/* Left Content */}
-					<VStack align="start" pt={30} spacing={4}>
-						<Heading fontSize="3xl" pb={5}>
+					<VStack
+						align={{ base: 'center', md: 'center' }}
+						justify="center"
+						pt={{ base: 10, md: 30 }}
+						spacing={4}
+						textAlign={{ base: 'center', md: 'center' }}
+					>
+						<Heading fontSize={{ base: '5xl', md: '3xl' }} pb={5}>
 							Where Tasks become <br />
-							<HStack spacing="0">
+							<HStack
+								spacing="0"
+								justifyContent={{
+									base: 'center',
+									md: 'center',
+								}}
+							>
 								{letters.map((letter, index) => (
 									<Text
 										as="span"
 										key={index}
 										display="inline-block"
-										fontSize="5xl"
+										fontSize={{ base: '5xl', md: '5xl' }}
 										pt={10}
 										fontWeight="bold"
 										sx={{
-											animation: `wave 1s ease-in-out ${
-												index * 0.2
+											animation: `wave 2s ease-in-out ${
+												index * 0.1
 											}s infinite`,
 											'@keyframes wave': {
 												'0%': {
@@ -57,18 +71,26 @@ const LandingPage = () => {
 											},
 										}}
 									>
-										Taskable
+										{letter}
 									</Text>
 								))}
 							</HStack>
 						</Heading>
-						<Text align="start" fontSize="lg" fontWeight="medium">
+						<Text
+							align="start"
+							fontSize="lg"
+							fontWeight="medium"
+							textAlign={{
+								base: 'center',
+								md: 'center',
+							}}
+						>
 							Looking to match with a developer? <br />
 							Find the perfect match to tackle any challenge{' '}
 							<br />
 							with our network of skilled developers.
 						</Text>
-						<Stack direction="row" spacing={4}>
+						<Stack direction="row" spacing={4} justify="center">
 							<Link to="/login">
 								<Button
 									colorScheme="gray"
@@ -101,11 +123,15 @@ const LandingPage = () => {
 					</VStack>
 
 					{/* Right Content */}
-					<Box w="50%" display="flex" justifyContent="center">
+					<Box
+						w={{ base: '100%', md: '50%' }}
+						display="flex"
+						justifyContent="center"
+					>
 						<Image
 							src="./public/images/dev1.png"
 							alt="Developer at work"
-							boxSize="70%"
+							boxSize={{ base: '90%', md: '70%' }}
 							objectFit="contain"
 						/>
 					</Box>
@@ -113,20 +139,37 @@ const LandingPage = () => {
 			</Box>
 
 			{/* About Taskable Section */}
-			<Container maxW="container.2xl" py={20}>
-				<HStack spacing={10} align="center">
+			<Container maxW="container.2xl" py={{ base: 10, md: 20 }}>
+				<HStack
+					spacing={10}
+					align="center"
+					flexDirection={{ base: 'column', lg: 'row' }}
+				>
 					{/* Left Side Image */}
-					<Box w="50%" display="flex" justifyContent="center">
+					<Box
+						w={{ base: '100%', md: '50%' }}
+						display="flex"
+						justifyContent="center"
+					>
 						<Image
 							src="./public/images/dev2.png"
 							alt="Developer at work"
-							boxSize="70%"
+							boxSize={{ base: '90%', md: '70%' }}
 							objectFit="contain"
 						/>
 					</Box>
 					{/* Right Side Text */}
-					<VStack align="start" spacing={2} maxW="600px">
-						<Heading fontSize="2xl" mb={4}>
+					<VStack
+						align={{ base: 'center', md: 'start' }}
+						spacing={2}
+						maxW={{ base: '100%', md: '600px' }}
+						justifyContent="center"
+					>
+						<Heading
+							fontSize="2xl"
+							mb={4}
+							alignText={{ base: 'center', md: 'start' }}
+						>
 							About Taskable
 						</Heading>
 						<Text fontSize="lg" mb={6}>
