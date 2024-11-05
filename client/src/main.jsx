@@ -46,6 +46,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import LandingPage from './pages/LandingPage';
 import Explore from './pages/Explore';
+import Checkout from './pages/Checkout';
 
 const router = createBrowserRouter([
 	{
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <LandingPage /> },
 			{ path: 'explore', element: <Explore /> }, 
+			{ path: 'checkout', element: <Checkout /> },
 		],
 	},
 ]);
