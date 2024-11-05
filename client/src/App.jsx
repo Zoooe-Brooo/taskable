@@ -50,10 +50,11 @@ import { ChakraProvider, Box, Flex } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import theme from './components/responsiveness/index';
 
 function App() {
 	return (
-		<ChakraProvider>
+		<ChakraProvider theme={theme}>
 			<Flex direction="column" minH="100vh">
 				<Header />
 				<Box flex="1" mt="60px">
