@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Flex, Link, Text } from '@chakra-ui/react';
+import { FaUser, FaHistory, FaShoppingCart } from 'react-icons/fa';
+import '../Cart/style.css';
 
 function Header() {
   const [isVisible, setIsVisible] = useState(true);
@@ -55,14 +57,14 @@ function Header() {
           Taskable
         </Text>
         <Flex>
-          <Link href="#" color="var(--dark)" mx={2}>
-            My Profile
+          <Link href="#" className="icon-link" color="var(--dark)" mx={5}>
+            <FaUser />
           </Link>
-          <Link href="#" color="var(--dark)" mx={2}>
-            Previous Orders
+          <Link href="#" className="icon-link" color="var(--dark)" mx={5}>
+            <FaHistory />
           </Link>
-          <Link href="#" color="var(--dark)" mx={2}>
-            Cart
+          <Link href="#" className="icon-link" color="var(--dark)" mx={5}>
+            <FaShoppingCart />
           </Link>
         </Flex>
       </Flex>
