@@ -1,19 +1,19 @@
 {
-  "name": "taskable",
-  "version": "1.0.0",
-  "description": "An application that user can provide skills or seek for the skillful people to do their task.",
-  "main": "server/server.js",
-  "scripts": {
-    "start": "node server --ignore client",
-    "develop": "concurrently \"cd server && npm run start\" \"cd client && npm run dev\"",
-    "install": "cd server && npm i && cd ../client && npm i",
-    "seed": "cd server && npm run seed",
-    "build": "cd client && npm run build"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "concurrently": "^5.1.0"
-  }
+	"name": "taskable",
+	"version": "1.0.0",
+	"description": "An application that user can provide skills or seek for the skillful people to do their task.",
+	"main": "server/server.js",
+	"scripts": {
+		"start": "node server --ignore client",
+		"develop": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
+		"install": "cd server && npm i && cd ../client && npm i",
+		"seed": "cd server && npm run seed",
+		"build": "cd client && npm run build"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"concurrently": "^5.1.0"
+	}
 }
