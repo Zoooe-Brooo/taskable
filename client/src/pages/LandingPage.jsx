@@ -8,11 +8,26 @@ import {
 	HStack,
 	Image,
 	Container,
+	useDisclosure,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom'; will use later
+import LoginModal from '../components/LoginModal';
+import SignupModal from '../components/SignupModal';
+// import { useState } from 'react'; will use later
 
 const LandingPage = () => {
-	const letters = 'Taskable'.split(''); // will try fix this tonight
+	const {
+		isOpen: isLoginOpen,
+		onOpen: onLoginOpen,
+		onClose: onLoginClose,
+	} = useDisclosure();
+	const {
+		isOpen: isSignupOpen,
+		onOpen: onSignupOpen,
+		onClose: onSignupClose,
+	} = useDisclosure();
+
+	const letters = 'Taskable'.split('');
 	return (
 		<>
 			<Box
@@ -91,34 +106,33 @@ const LandingPage = () => {
 							with our network of skilled developers.
 						</Text>
 						<Stack direction="row" spacing={4} justify="center">
-							<Link to="/login">
-								<Button
-									colorScheme="gray"
-									size="lg"
-									mt={6}
-									px={8}
-									py={6}
-									fontSize="lg"
-									borderRadius="md"
-									variant="solid"
-								>
-									Login
-								</Button>
-							</Link>
-							<Link to="/signup">
-								<Button
-									colorScheme="gray"
-									size="lg"
-									mt={6}
-									px={8}
-									py={6}
-									fontSize="lg"
-									borderRadius="md"
-									variant="solid"
-								>
-									Sign Up
-								</Button>
-							</Link>
+							<Button
+								colorScheme="gray"
+								size="lg"
+								mt={6}
+								px={8}
+								py={6}
+								fontSize="lg"
+								borderRadius="md"
+								variant="solid"
+								onClick={onLoginOpen}
+							>
+								Login
+							</Button>
+
+							<Button
+								colorScheme="gray"
+								size="lg"
+								mt={6}
+								px={8}
+								py={6}
+								fontSize="lg"
+								borderRadius="md"
+								variant="solid"
+								onClick={onSignupOpen}
+							>
+								Sign Up
+							</Button>
 						</Stack>
 					</VStack>
 
@@ -129,7 +143,7 @@ const LandingPage = () => {
 						justifyContent="center"
 					>
 						<Image
-							src="./public/images/dev1.png"
+							src="/images/dev1.png"
 							alt="Developer at work"
 							boxSize={{ base: '90%', md: '70%' }}
 							objectFit="contain"
@@ -137,6 +151,8 @@ const LandingPage = () => {
 					</Box>
 				</HStack>
 			</Box>
+			<LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
+			<SignupModal isOpen={isSignupOpen} onClose={onSignupClose} />
 
 			{/* About Taskable Section */}
 			<Container maxW="container.2xl" py={{ base: 10, md: 20 }}>
@@ -152,7 +168,7 @@ const LandingPage = () => {
 						justifyContent="center"
 					>
 						<Image
-							src="./public/images/dev2.png"
+							src="/images/dev2.png"
 							alt="Developer at work"
 							boxSize={{ base: '90%', md: '70%' }}
 							objectFit="contain"
@@ -168,7 +184,7 @@ const LandingPage = () => {
 						<Heading
 							fontSize="2xl"
 							mb={4}
-							alignText={{ base: 'center', md: 'start' }}
+							aligntext={{ base: 'center', md: 'start' }}
 						>
 							About Taskable
 						</Heading>
@@ -191,10 +207,18 @@ const LandingPage = () => {
 							</Text>{' '}
 							is here to help you make it a reality.
 						</Text>
-						<Button colorScheme="teal" size="lg">
+						<Button
+							colorScheme="teal"
+							size="lg"
+							onClick={onSignupOpen}
+						>
 							Sign up
 						</Button>
 					</VStack>
+					<SignupModal
+						isOpen={isSignupOpen}
+						onClose={onSignupClose}
+					/>
 				</HStack>
 			</Container>
 		</>

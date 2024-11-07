@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Box, Flex, Link, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Link,
+  Text,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/react';
 import { FaUser, FaHistory, FaShoppingCart } from 'react-icons/fa';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import '../Cart/style.css';
 
 function Header() {
@@ -56,7 +67,7 @@ function Header() {
         >
           Taskable
         </Text>
-        <Flex>
+        <Flex display={{ base: 'none', md: 'flex' }}>
           <Link href="#" className="icon-link" color="var(--dark)" mx={5}>
             <FaUser />
           </Link>
@@ -67,9 +78,36 @@ function Header() {
             <FaShoppingCart />
           </Link>
         </Flex>
+        <Box display={{ base: 'flex', md: 'none' }}>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              icon={<HamburgerIcon />}
+              variant="outline"
+              aria-label="Options"
+            />
+            <MenuList>
+              <MenuItem>
+                <Link href="#" color="var(--dark)">
+                  My Profile
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link href="#" color="var(--dark)">
+                  Previous Orders
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link href="#" color="var(--dark)">
+                  Cart
+                </Link>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
       </Flex>
     </Box>
   );
 }
 
-export default Header; 
+export default Header;

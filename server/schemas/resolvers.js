@@ -1,118 +1,166 @@
 const { User, Freelancer, Order } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 const resolvers = {
-  Query: {
-    freelancers: async () => {
-      return await Freelancer.find({});
-    },
-    freelancer: async (parent, { _id }) => {
-      return await Freelancer.findById(_id);
-    },
-    user: async (parent, args, context) => {
-      if (context.user) {
-        const user = await User.findById(context.user._id).populate('orders.freelancers');
+	Query: {
+		freelancers: async () => {
+			return await Freelancer.find({});
+		},
+		freelancer: async (parent, { _id }) => {
+			return await Freelancer.findById(_id);
+		},
+		user: async (parent, args, context) => {
+			if (context.user) {
+				const user = await User.findById(context.user._id).populate(
+					'orders.freelancers'
+				);
 
-        user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
+				user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
-        return user;
-      }
+				return user;
+			}
 
-      throw AuthenticationError;
-    },
-    order: async (parent, { _id }, context) => {
-      if (context.user) {
-        const user = await User.findById(context.user._id).populate('orders.freelancers');
+			throw AuthenticationError;
+		},
+		order: async (parent, { _id }, context) => {
+			if (context.user) {
+				const user = await User.findById(context.user._id).populate(
+					'orders.freelancers'
+				);
 
-        return user.orders.id(_id);
-      }
+				return user.orders.id(_id);
+			}
 
-      throw AuthenticationError;
-    },
-    checkout: async (parent, args, context) => {
-      const url = new URL(context.headers.referer).origin;
-      const order = new Order({ freelancers: args.freelancers });
-      const line_items = [];
+			throw AuthenticationError;
+		},
+		checkout: async (parent, args, context) => {
+			const url = new URL(context.headers.referer).origin;
+			const order = new Order({ freelancers: args.freelancers });
+			const line_items = [];
 
-      const { freelancers } = await order.populate('freelancers');
+			const { freelancers } = await order.populate('freelancers');
 
-      for (let i = 0; i < freelancers.length; i++) {
-        const freelancer = await stripe.freelancers.create({
-          name: freelancers[i].name,
-          description: freelancers[i].description,
-          images: [`${url}/images/${freelancers[i].image}`]
-        });
+			for (let i = 0; i < freelancers.length; i++) {
+				const freelancer = await stripe.freelancers.create({
+					name: freelancers[i].name,
+					description: freelancers[i].description,
+					images: [`${url}/images/${freelancers[i].image}`],
+				});
 
-        const price = await stripe.prices.create({
-          freelancer: freelancer.id,
-          unit_amount: freelancers[i].price * 100,
-          currency: 'aud',
-        });
+				const price = await stripe.prices.create({
+					freelancer: freelancer.id,
+					unit_amount: freelancers[i].price * 100,
+					currency: 'aud',
+				});
 
-        line_items.push({
-          price: price.id,
-          quantity: 1
-        });
-      }
+				line_items.push({
+					price: price.id,
+					quantity: 1,
+				});
+			}
 
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items,
-        mode: 'payment',
-        success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${url}/`
-      });
+			const session = await stripe.checkout.sessions.create({
+				payment_method_types: ['card'],
+				line_items,
+				mode: 'payment',
+				success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+				cancel_url: `${url}/`,
+			});
 
-      return { session: session.id };
-    }
-  },
-  Mutation: {
-    addUser: async (parent, args) => {
-      const user = await User.create(args);
-      const token = signToken(user);
+			return { session: session.id };
+		},
+	},
+	Mutation: {
+		addUser: async (parent, args) => {
+			addUser: async (_, { firstName, lastName, email, password }) => {
+				try {
+					// Create new user
+					const user = await User.create({
+						username: `${firstName} ${lastName}`,
+						email,
+						password,
+					});
+					const token = jwt.sign(
+						{ userId: user._id },
+						process.env.JWT_SECRET,
+						{ expiresIn: '1h' }
+					);
+					const transporter = nodemailer.createTransport({
+						service: 'gmail',
+						auth: {
+							user: process.env.GMAIL_USER,
+							pass: process.env.GMAIL_PASS,
+						},
+					});
+					const mailOptions = {
+						from: process.env.GMAIL_USER,
+						to: email,
+						subject: 'Welcome to Taskable!',
+						text: `Hello ${firstName},\n\nThank you for signing up to Taskable. We hope you enjoy our service!\n\nBest regards,\nThe Taskable Team`,
+					};
 
-      return { token, user };
-    },
-    addOrder: async (parent, { freelancers }, context) => {
-      if (context.user) {
-        const order = new Order({ freelancers });
+					await transporter.sendMail(mailOptions);
 
-        await User.findByIdAndUpdate(context.user._id, { $push: { orders: order } });
+					return {
+						token,
+						user,
+					};
+				} catch (err) {
+					console.error(err);
+					throw new Error('Something went wrong!');
+				}
+			};
+		},
+		addOrder: async (parent, { freelancers }, context) => {
+			if (context.user) {
+				const order = new Order({ freelancers });
 
-        return order;
-      }
+				await User.findByIdAndUpdate(context.user._id, {
+					$push: { orders: order },
+				});
 
-      throw AuthenticationError;
-    },
-    updateUser: async (parent, args, context) => {
-      if (context.user) {
-        return await User.findByIdAndUpdate(context.user._id, args, { new: true });
-      }
+				return order;
+			}
 
-      throw AuthenticationError;
-    },
-    updateFreelancer: async (parent, { _id, availability }) => {
-      return await Freelancer.findByIdAndUpdate(_id, { availability: availability === 'false' }, { new: true });
-    },
-    login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email });
+			throw AuthenticationError;
+		},
+		updateUser: async (parent, args, context) => {
+			if (context.user) {
+				return await User.findByIdAndUpdate(context.user._id, args, {
+					new: true,
+				});
+			}
 
-      if (!user) {
-        throw AuthenticationError;
-      }
+			throw AuthenticationError;
+		},
+		updateFreelancer: async (parent, { _id, availability }) => {
+			return await Freelancer.findByIdAndUpdate(
+				_id,
+				{ availability: availability === 'false' },
+				{ new: true }
+			);
+		},
+		login: async (parent, { email, password }) => {
+			const user = await User.findOne({ email });
 
-      const correctPw = await user.isCorrectPassword(password);
+			if (!user) {
+				throw AuthenticationError;
+			}
 
-      if (!correctPw) {
-        throw AuthenticationError;
-      }
+			const correctPw = await user.isCorrectPassword(password);
 
-      const token = signToken(user);
+			if (!correctPw) {
+				throw AuthenticationError;
+			}
 
-      return { token, user };
-    }
-  }
+			const token = signToken(user);
+
+			return { token, user };
+		},
+	},
 };
 
 module.exports = resolvers;
