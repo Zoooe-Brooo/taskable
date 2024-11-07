@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import {
   Box,
   Flex,
-  Link,
   Text,
   IconButton,
   Menu,
@@ -10,8 +9,9 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import { FaUser, FaHistory, FaShoppingCart } from 'react-icons/fa';
+import { FaUser, FaHistory, FaShoppingCart, FaCompass } from 'react-icons/fa';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import { Link } from 'react-router-dom';
 import '../Cart/style.css';
 
 function Header() {
@@ -59,22 +59,24 @@ function Header() {
       }}
     >
       <Flex justify="space-between" align="center">
-        <Text
-          as="h1"
-          style={{ color: 'var(--dark)' }}
-          fontSize="2xl"
-          fontWeight="bold"
-        >
-          Taskable
-        </Text>
+        <Link to="/explore" style={{ textDecoration: 'none' }}>
+          <Text
+            as="h1"
+            style={{ color: 'var(--dark)' }}
+            fontSize="2xl"
+            fontWeight="bold"
+          >
+            Taskable
+          </Text>
+        </Link>
         <Flex display={{ base: 'none', md: 'flex' }}>
-          <Link href="#" className="icon-link" color="var(--dark)" mx={5}>
+          <Link to="/my-profile" className="icon-link" color="var(--dark)" mx={5}>
             <FaUser />
           </Link>
-          <Link href="#" className="icon-link" color="var(--dark)" mx={5}>
-            <FaHistory />
+          <Link to="/explore" className="icon-link" color="var(--dark)" mx={5}>
+            <FaCompass />
           </Link>
-          <Link href="#" className="icon-link" color="var(--dark)" mx={5}>
+          <Link to="/checkout" className="icon-link" color="var(--dark)" mx={5}>
             <FaShoppingCart />
           </Link>
         </Flex>
@@ -88,17 +90,17 @@ function Header() {
             />
             <MenuList>
               <MenuItem>
-                <Link href="#" color="var(--dark)">
+                <Link to="/my-profile" color="var(--dark)">
                   My Profile
                 </Link>
               </MenuItem>
               <MenuItem>
-                <Link href="#" color="var(--dark)">
-                  Previous Orders
+                <Link to="/explore" color="var(--dark)">
+                  Explore
                 </Link>
               </MenuItem>
               <MenuItem>
-                <Link href="#" color="var(--dark)">
+                <Link to="/checkout" color="var(--dark)">
                   Cart
                 </Link>
               </MenuItem>

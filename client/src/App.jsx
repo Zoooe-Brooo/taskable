@@ -52,6 +52,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import theme from './components/responsiveness/index';
 
+
 function App() {
 	return (
 		<ChakraProvider theme={theme}>
