@@ -14,15 +14,67 @@ import {
 	IconButton,
 	Text,
 	HStack,
+	useToast,
 } from '@chakra-ui/react';
 import { FaGoogle, FaApple, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../../utils/mutations';
+import Auth from '../../utils/auth';
 
 function SignupModal({ isOpen, onClose }) {
 	const [showPassword, setShowPassword] = useState(false);
-	const [password, setPassword] = useState('');
+	const [formData, setFormData] = useState({
+		firstName: '',
+		lastName: '',
+		email: '',
+		password: '',
+	});
+	const toast = useToast();
+
+	const [addUser] = useMutation(ADD_USER);
 
 	const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setFormData({
+			...formData,
+			[name]: value,
+		});
+	};
+
+	const handleSignup = async () => {
+		try {
+			const { data } = await addUser({
+				variables: { ...formData },
+			});
+
+			// Store token and log the user in
+			Auth.login(data.addUser.token);
+
+			// Display success message
+			toast({
+				title: 'Account created.',
+				description: 'Welcome to Taskable!',
+				status: 'success',
+				duration: 3000,
+				isClosable: true,
+			});
+
+			// Close the modal
+			onClose();
+		} catch (error) {
+			console.error('Error signing up:', error);
+			toast({
+				title: 'Error',
+				description: 'Could not create account. Please try again.',
+				status: 'error',
+				duration: 3000,
+				isClosable: true,
+			});
+		}
+	};
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -66,7 +118,13 @@ function SignupModal({ isOpen, onClose }) {
 						<FormLabel fontSize="sm" color="gray.700">
 							First Name
 						</FormLabel>
-						<Input type="text" placeholder="First Name" />
+						<Input
+							name="firstName"
+							type="text"
+							placeholder="First Name"
+							value={formData.firstName}
+							onChange={handleChange}
+						/>
 					</FormControl>
 
 					{/* Last Name Input */}
@@ -74,7 +132,13 @@ function SignupModal({ isOpen, onClose }) {
 						<FormLabel fontSize="sm" color="gray.700">
 							Last Name
 						</FormLabel>
-						<Input type="text" placeholder="Last Name" />
+						<Input
+							name="lastName"
+							type="text"
+							placeholder="Last Name"
+							value={formData.lastName}
+							onChange={handleChange}
+						/>
 					</FormControl>
 
 					{/* Email Input */}
@@ -82,33 +146,38 @@ function SignupModal({ isOpen, onClose }) {
 						<FormLabel fontSize="sm" color="gray.700">
 							Email address
 						</FormLabel>
-						<Input type="email" placeholder="Email address" />
+						<Input
+							name="email"
+							type="email"
+							placeholder="Email address"
+							value={formData.email}
+							onChange={handleChange}
+						/>
 					</FormControl>
 
 					{/* Password Input */}
-					<FormControl mb={4}>
+					<FormControl mb={4} position="relative">
 						<FormLabel fontSize="sm" color="gray.700">
 							Password
 						</FormLabel>
 						<Input
+							name="password"
 							type={showPassword ? 'text' : 'password'}
 							placeholder="Password"
+							value={formData.password}
+							onChange={handleChange}
 							pr="4.5rem"
-							mb={2}
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
 						/>
-						{password && (
+						{formData.password && (
 							<IconButton
 								icon={showPassword ? <FaEyeSlash /> : <FaEye />}
 								onClick={togglePasswordVisibility}
 								aria-label="Toggle password visibility"
 								variant="ghost"
-								size="xs"
+								size="sm"
 								position="absolute"
-								top="65%"
-								right="5px"
-								p="0"
+								top="50%"
+								right="0.5rem"
 								transform="translateY(-50%)"
 								zIndex="1"
 							/>
@@ -118,14 +187,24 @@ function SignupModal({ isOpen, onClose }) {
 
 				<ModalFooter flexDirection="column">
 					{/* Signup Button */}
-					<Button colorScheme="teal" w="full" mb={3}>
+					<Button
+						colorScheme="teal"
+						w="full"
+						mb={3}
+						onClick={handleSignup}
+					>
 						Sign Up
 					</Button>
 
 					{/* Login Link */}
 					<Text fontSize="md" color="gray.600">
 						Already have an account?{' '}
-						<Text as="span" color="teal.600" cursor="pointer">
+						<Text
+							as="span"
+							color="teal.600"
+							cursor="pointer"
+							onClick={onClose} // Close the signup modal and open the login modal if needed
+						>
 							Log in
 						</Text>
 					</Text>
