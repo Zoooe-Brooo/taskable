@@ -49,17 +49,22 @@ import Explore from './pages/Explore';
 import Checkout from './pages/Checkout';
 import MyProfile from './pages/MyProfile';
 
+import OrderHistory from './pages/OrderHistory';
+import Cart from './components/Cart';
+
 const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <App />,
-		children: [
-			{ index: true, element: <LandingPage /> },
-			{ path: 'explore', element: <Explore /> }, 
-			{ path: 'checkout', element: <Checkout /> },
-			{ path: 'my-profile', element: <MyProfile /> },
-		],
-	},
+  {
+    path: '/',
+    element: <App />,
+    children: [
+      { index: true, element: <LandingPage /> },
+      { path: 'explore', element: <Explore /> },
+      { path: 'checkout', element: <Checkout /> },
+      { path: 'my-profile', element: <MyProfile /> },
+      { path: 'orderHistory', element: <OrderHistory /> }, 
+      { path: 'cart', element: <Cart /> }, 
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
