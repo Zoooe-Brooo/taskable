@@ -4,6 +4,8 @@ import { StarIcon, CheckCircleIcon } from '@chakra-ui/icons';
 
 const FreelancerProfileModal = ({ freelancer, isOpen, onClose, addToCart }) => {
   if (!isOpen) return null;
+  
+  const firstName = freelancer.name.split(' ')[0].toLowerCase();
 
   return (
     <Box
@@ -35,7 +37,7 @@ const FreelancerProfileModal = ({ freelancer, isOpen, onClose, addToCart }) => {
       >
         <Flex direction="column" align="center">
           <Image
-            src={freelancer.image}
+            src={`/public/images/profile-pics/${firstName}.png`}
             alt={freelancer.name}
             borderRadius="full"
             boxSize="180px"
