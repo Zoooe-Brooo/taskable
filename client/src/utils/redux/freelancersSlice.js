@@ -1,21 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
-
-// GraphQL query
-const QUERY_FREELANCERS = gql`
-  {
-    freelancers {
-      _id
-      name
-      service
-      description
-      image
-      price
-      availability
-      skills
-    }
-  }
-`;
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { QUERY_FREELANCERS } from '../queries';
 
 // Apollo Client
 const client = new ApolloClient({

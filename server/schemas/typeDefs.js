@@ -13,6 +13,9 @@ const typeDefs = `
     description: String
     image: String
     price: Float!
+    rating: Float
+    projectsCompleted: Int
+    signedUpDuration: Int
     availability: Boolean
     skills: [String]
   }
