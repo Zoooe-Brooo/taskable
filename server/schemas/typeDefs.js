@@ -13,6 +13,9 @@ const typeDefs = `
     description: String
     image: String
     price: Float!
+    rating: Float
+    projectsCompleted: Int
+    signedUpDuration: Int
     availability: Boolean
     skills: [String]
   }
@@ -33,7 +36,7 @@ const typeDefs = `
   }
 
   type Query {
-    freelancers(name: String!): [Freelancer]
+    freelancers: [Freelancer]
     freelancer(_id: ID!): Freelancer
     user: User
     order(_id: ID!): Order
@@ -41,9 +44,9 @@ const typeDefs = `
   }
 
   type Mutation {
-    addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
+    addUser(username: String!, email: String!, password: String!): Auth
     addOrder(freelancers: [ID]!): Order
-    updateUser(firstName: String, lastName: String, email: String, password: String): User
+    updateUser(userame: String, email: String, password: String): User
     updateFreelancer(_id: ID!, quantity: Int!): Freelancer
     login(email: String!, password: String!): Auth
   }

@@ -14,6 +14,9 @@ db.once('open', async () => {
       'A versatile developer skilled in both front-end and back-end technologies, capable of building and maintaining complex web applications.',
       image: 'freelancer-image.png',
       price: 60,
+      rating: 4.5,
+		  projectsCompleted: 120,
+		  signedUpDuration: 3,
       availability: true,
       skills: ['HTML', 'CSS', 'JavaScript', 'Node.js', 'React', 'MongoDB']
     },
@@ -24,6 +27,9 @@ db.once('open', async () => {
       'A front-end developer specializing in building and maintaining responsive websites and web applications.',
       image: 'freelancer-image.png',
       price: 40,
+      rating: 4.2,
+		  projectsCompleted: 90,
+		  signedUpDuration: 2,
       availability: true,
       skills: ['HTML', 'CSS', 'JavaScript', 'React', 'Bootstrap']
     },
@@ -34,6 +40,9 @@ db.once('open', async () => {
       'A back-end developer specializing in building and maintaining server-side logic and databases for web applications.',
       image: 'freelancer-image.png',
       price: 50,
+      rating: 4.8,
+		  projectsCompleted: 100,
+		  signedUpDuration: 2,
       availability: true,
       skills: ['Node.js', 'Express', 'MongoDB', 'SQL', 'REST APIs', 'GraphQL']
     },
@@ -44,6 +53,9 @@ db.once('open', async () => {
       'A UI/UX designer specializing in creating user-friendly interfaces and experiences for web and mobile applications.',
       image: 'freelancer-image.png',
       price: 45,
+      rating: 4.6,
+	  	projectsCompleted: 80,
+  		signedUpDuration: 1,
       availability: true,
       skills: ['Figma', 'Adobe XD', 'Sketch', 'InVision', 'User Research', 'Wireframing']
     },
@@ -54,6 +66,9 @@ db.once('open', async () => {
       'A responsible and caring baby sitter with experience caring for children of all ages.',
       image: 'freelancer-image.png',
       price: 35,
+      rating: 4.9,
+	  	projectsCompleted: 70,
+  		signedUpDuration: 1,
       availability: true,
       skills: ['Childcare', 'First Aid', 'CPR', 'Cooking', 'Cleaning']
     },
@@ -64,6 +79,9 @@ db.once('open', async () => {
       'A skilled gardener with experience maintaining lawns, gardens, and landscapes.',
       image: 'freelancer-image.png',
       price: 45,
+      rating: 4.7,
+	  	projectsCompleted: 60,
+  		signedUpDuration: 1,
       availability: true,
       skills: ['Lawn Care', 'Planting', 'Pruning', 'Weeding', 'Mulching']
     },
@@ -74,6 +92,9 @@ db.once('open', async () => {
       'A thorough and detail-oriented house cleaner with experience cleaning homes, apartments, and offices.',
       image: 'freelancer-image.png',
       price: 30,
+      rating: 4.8,
+	  	projectsCompleted: 50,
+	  	signedUpDuration: 1,
       availability: true,
       skills: ['Cleaning', 'Dusting', 'Vacuuming', 'Mopping', 'Laundry']
     },
@@ -84,6 +105,9 @@ db.once('open', async () => {
       'A reliable and trustworthy dog walker with experience walking dogs of all breeds and sizes.',
       image: 'freelancer-image.png',
       price: 20,
+      rating: 4.9,
+		  projectsCompleted: 40,
+	  	signedUpDuration: 1,
       availability: true,
       skills: ['Dog Walking', 'Pet Sitting', 'Feeding', 'Watering', 'Exercise']
     },
@@ -94,6 +118,9 @@ db.once('open', async () => {
       'An experienced tutor with expertise in a variety of subjects, capable of helping students of all ages.',
       image: 'freelancer-image.png',
       price: 40,
+      rating: 4.7,
+		  projectsCompleted: 30,
+	    signedUpDuration: 1,
       availability: true,
       skills: ['Math', 'Science', 'English', 'History', 'Foreign Language']
     },
@@ -104,6 +131,9 @@ db.once('open', async () => {
       'A certified personal trainer with experience creating custom workout plans and providing fitness coaching.',
       image: 'freelancer-image.png',
       price: 40,
+      rating: 4.6,
+		  projectsCompleted: 20,
+  		signedUpDuration: 1,
       availability: true,
       skills: ['Fitness Training', 'Strength Training', 'Cardio', 'Nutrition', 'Weight Loss']
     }

@@ -9,6 +9,9 @@ export const QUERY_FREELANCERS = gql`
       description
       image
       price
+      rating
+      projectsCompleted
+      signedUpDuration
       availability
       skills
     }
@@ -24,6 +27,9 @@ export const QUERY_FREELANCER = gql`
       description
       image
       price
+      rating
+      projectsCompleted
+      signedUpDuration
       availability
       skills
     }
