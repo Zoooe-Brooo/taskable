@@ -10,8 +10,7 @@ const freelancerSchema = new Schema({
   },
   service: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
   description: {
     type: String
@@ -22,11 +21,11 @@ const freelancerSchema = new Schema({
   price: {
     type: Number,
     required: true,
-    min: 0.99
+    min: 0
   },
   rating: {
     type: Number,
-    min: 1,
+    min: 0,
     max: 5
   },
   projectsCompleted: {
@@ -40,8 +39,7 @@ const freelancerSchema = new Schema({
   availability: {
     type: Boolean,
     default: true
-  },
-  skills: []
+  }
 });
 
 const Freelancer = mongoose.model('Freelancer', freelancerSchema);

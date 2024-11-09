@@ -14,7 +14,8 @@ const server = new ApolloServer({
 	typeDefs,
 	resolvers,
 	formatError: (error) => {
-		console.error(error);
+		console.error('Detailed server error:', error);
+		console.error('Original error:', error.originalError);
 		return error;
 	},
 });

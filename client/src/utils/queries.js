@@ -13,7 +13,6 @@ export const QUERY_FREELANCERS = gql`
       projectsCompleted
       signedUpDuration
       availability
-      skills
     }
   }
 `;
@@ -31,15 +30,16 @@ export const QUERY_FREELANCER = gql`
       projectsCompleted
       signedUpDuration
       availability
-      skills
     }
   }
 `;
 
 export const QUERY_USER = gql`
-  {
+  query getUser {
     user {
-      username
+      _id
+      firstName
+      lastName
       email
       orders {
         _id
@@ -48,9 +48,10 @@ export const QUERY_USER = gql`
           _id
           name
           service
+          description
           price
-          availability
-          skills
+          image
+          rating
         }
       }
     }
@@ -68,7 +69,6 @@ export const QUERY_ORDER = gql`
           service
           price
           availability
-          skills
       }
     }
   }

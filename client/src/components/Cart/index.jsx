@@ -2,17 +2,36 @@ import { useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { useLazyQuery } from '@apollo/client';
 import { QUERY_CHECKOUT } from '../../utils/queries';
-// import { idbPromise } from '../../utils/helpers';
-// import CartItem from '../CartItem';
+import { idbPromise } from '../../utils/helpers';
+import CartItem from '../CartItem';
 import Auth from '../../utils/auth';
-// import { useStoreContext } from '../../utils/GlobalState';
-// import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from '../../utils/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMultipleToCart, toggleCart } from '../../utils/redux/freelancersSlice';
 import './style.css';
+import {
+  Box,
+  Button,
+  VStack,
+  Text,
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Badge,
+  Flex,
+  Icon,
+  Divider
+} from '@chakra-ui/react';
+import { FaShoppingCart } from 'react-icons/fa';
 
 const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
 const Cart = () => {
-  const [state, dispatch] = useStoreContext();
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.freelancers.cart);
+  const cartOpen = useSelector(state => state.freelancers.cartOpen);
   const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
   useEffect(() => {
@@ -25,22 +44,22 @@ const Cart = () => {
 
   useEffect(() => {
     async function getCart() {
-      const cart = await idbPromise('cart', 'get');
-      dispatch({ type: ADD_MULTIPLE_TO_CART, products: [...cart] });
+      const cartItems = await idbPromise('cart', 'get');
+      dispatch(addMultipleToCart(cartItems));
     }
 
-    if (!state.cart.length) {
+    if (!cart.length) {
       getCart();
     }
-  }, [state.cart.length, dispatch]);
+  }, [cart.length, dispatch]);
 
-  function toggleCart() {
-    dispatch({ type: TOGGLE_CART });
-  }
+  const handleToggleCart = () => {
+    dispatch(toggleCart());
+  };
 
   function calculateTotal() {
     let sum = 0;
-    state.cart.forEach((item) => {
+    cart.forEach((item) => {
       sum += item.price * item.purchaseQuantity;
     });
     return sum.toFixed(2);
@@ -49,7 +68,7 @@ const Cart = () => {
   function submitCheckout() {
     const productIds = [];
 
-    state.cart.forEach((item) => {
+    cart.forEach((item) => {
       for (let i = 0; i < item.purchaseQuantity; i++) {
         productIds.push(item._id);
       }
@@ -61,46 +80,69 @@ const Cart = () => {
   }
 
   return (
-    <div className="cart">
-      <button className="cart-button" onClick={toggleCart}>
-        🛒
-        {state.cart.length > 0 && (
-          <span className="cart-count">{state.cart.length}</span>
+    <>
+      <Button
+        position="fixed"
+        right={4}
+        top={20}
+        onClick={handleToggleCart}
+        colorScheme="teal"
+        borderRadius="full"
+        p={3}
+      >
+        <Icon as={FaShoppingCart} boxSize={6} />
+        {cart.length > 0 && (
+          <Badge
+            position="absolute"
+            top="-2"
+            right="-2"
+            colorScheme="red"
+            borderRadius="full"
+          >
+            {cart.length}
+          </Badge>
         )}
-      </button>
-      {state.cartOpen && (
-        <div className="cart-content">
-          <div className="close" onClick={toggleCart}>
-            [close]
-          </div>
-          <h2>Shopping Cart</h2>
-          {state.cart.length ? (
-            <div>
-              {state.cart.map((item) => (
-                <CartItem key={item._id} item={item} />
-              ))}
+      </Button>
 
-              <div className="flex-row space-between">
-                <strong>Total: ${calculateTotal()}</strong>
-
-                {Auth.loggedIn() ? (
-                  <button onClick={submitCheckout}>Checkout</button>
-                ) : (
-                  <span>(log in to check out)</span>
-                )}
-              </div>
-            </div>
-          ) : (
-            <h3>
-              <span role="img" aria-label="shocked">
-                😱
-              </span>
-              You haven't added anything to your cart yet!
-            </h3>
-          )}
-        </div>
-      )}
-    </div>
+      <Drawer
+        isOpen={cartOpen}
+        placement="right"
+        onClose={handleToggleCart}
+        size="md"
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Shopping Cart</DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={4} align="stretch">
+              {cart.length ? (
+                <>
+                  {cart.map((item) => (
+                    <CartItem key={item._id} item={item} />
+                  ))}
+                  <Divider />
+                  <Flex justify="space-between" align="center" p={4}>
+                    <Text fontWeight="bold">Total: ${calculateTotal()}</Text>
+                    {Auth.loggedIn() ? (
+                      <Button colorScheme="teal" onClick={submitCheckout}>
+                        Checkout
+                      </Button>
+                    ) : (
+                      <Text color="gray.500">(log in to check out)</Text>
+                    )}
+                  </Flex>
+                </>
+              ) : (
+                <Text textAlign="center" color="gray.500">
+                  Your cart is empty 😱
+                </Text>
+              )}
+            </VStack>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };
 

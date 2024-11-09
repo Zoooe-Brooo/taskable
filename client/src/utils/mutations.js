@@ -16,7 +16,8 @@ export const ADD_USER = gql`
 			token
 			user {
 				_id
-				username
+				firstName
+				lastName
 				email
 			}
 		}
@@ -29,6 +30,9 @@ export const LOGIN = gql`
 			token
 			user {
 				_id
+				firstName
+				lastName
+				email
 			}
 		}
 	}
@@ -44,8 +48,16 @@ export const ADD_ORDER = gql`
 				service
 				price
 				availability
-				skills
 			}
+		}
+	}
+`;
+
+export const RESET_PASSWORD = gql`
+	mutation resetPassword($email: String!) {
+		resetPassword(email: $email) {
+			success
+			message
 		}
 	}
 `;

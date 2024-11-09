@@ -142,7 +142,8 @@ db.once('open', async () => {
   console.log('freelancers seeded');
 
   await User.create({
-    username: 'Pamela Washington',
+    firstName: 'Pamela',
+    lastName: 'Washington',
     email: 'pamela@testmail.com',
     password: 'password12345',
     orders: [
@@ -153,7 +154,8 @@ db.once('open', async () => {
   });
 
   await User.create({
-    username: 'Elijah Holt',
+    firstName: 'Elijah',
+    lastName: 'Holt',
     email: 'eholt@testmail.com',
     password: 'password12345'
   });
