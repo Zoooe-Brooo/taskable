@@ -1,6 +1,7 @@
 const { User, Freelancer, Order } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
-const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const Stripe = require('stripe');
+const stripe = new Stripe('sk_test_wsFx86XDJWwmE4dMskBgJYrt'); 
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
@@ -40,38 +41,43 @@ const resolvers = {
 			const url = new URL(context.headers.referer).origin;
 			const order = new Order({ freelancers: args.freelancers });
 			const line_items = [];
-
+		  
 			const { freelancers } = await order.populate('freelancers');
-
+		  
 			for (let i = 0; i < freelancers.length; i++) {
-				const freelancer = await stripe.freelancers.create({
-					name: freelancers[i].name,
-					description: freelancers[i].description,
-					images: [`${url}/images/${freelancers[i].image}`],
-				});
-
-				const price = await stripe.prices.create({
-					freelancer: freelancer.id,
-					unit_amount: freelancers[i].price * 100,
-					currency: 'aud',
-				});
-
-				line_items.push({
-					price: price.id,
-					quantity: 1,
-				});
+			  // Create a product to represent the freelancer's service
+			  const product = await stripe.products.create({
+				name: freelancers[i].name,
+				description: freelancers[i].description,
+				images: [`${url}/images/${freelancers[i].image}`],
+			  });
+		  
+			  // Create a price for that product
+			  const price = await stripe.prices.create({
+				product: product.id,
+				unit_amount: freelancers[i].price * 100, // Convert to cents if needed
+				currency: 'aud',
+			  });
+		  
+			  // Add line item for the checkout session
+			  line_items.push({
+				price: price.id,
+				quantity: 1,
+			  });
 			}
-
+		  
+			// Create a checkout session
 			const session = await stripe.checkout.sessions.create({
-				payment_method_types: ['card'],
-				line_items,
-				mode: 'payment',
-				success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
-				cancel_url: `${url}/`,
+			  payment_method_types: ['card'],
+			  line_items,
+			  mode: 'payment',
+			  success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+			  cancel_url: `${url}/`,
 			});
-
+		  
 			return { session: session.id };
-		},
+		  },
+		  
 	},
 	Mutation: {
 		addUser: async (_, { firstName, lastName, email, password }) => {
