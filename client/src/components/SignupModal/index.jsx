@@ -102,6 +102,8 @@ function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 			navigate('/explore');
 		} catch (error) {
 			console.error('Full error object:', error);
+			console.error('Network error:', error.networkError);
+			console.error('GraphQL errors:', error.graphQLErrors);
 			toast({
 				title: 'Error',
 				description: error.message || 'Could not create account. Please try again.',
