@@ -76,6 +76,11 @@ const resolvers = {
 	Mutation: {
 		addUser: async (_, { firstName, lastName, email, password }) => {
 			try {
+				const existingUser = await User.findOne({ email });
+				if (existingUser) {
+					throw new Error('User with this email already exists');
+				}
+
 				const user = await User.create({
 					firstName,
 					lastName,
@@ -84,12 +89,15 @@ const resolvers = {
 				});
 				const token = signToken(user);
 				return {
-					token,
-					user,
+						token,
+						user,
 				};
 			} catch (err) {
 				console.error('Detailed error:', err);
-				throw new Error(err.message || 'Something went wrong!');
+				if (err.code === 11000) {
+					throw new Error('Email address is already in use');
+				}
+				throw new Error(err.message || 'Error creating user account');
 			}
 		},
 		addOrder: async (parent, { freelancers }, context) => {
