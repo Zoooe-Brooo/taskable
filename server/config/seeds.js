@@ -61,81 +61,81 @@ db.once('open', async () => {
     },
     {
       name: 'Jessica Brown',
-      service: 'Baby Sitter',
+      service: 'Web Designer',
       description:
-      'A responsible and caring baby sitter with experience caring for children of all ages.',
+      'A web designer specializing in creating visually appealing and responsive websites for businesses and individuals.',
       image: 'freelancer-image.png',
-      price: 35,
+      price: 45,
       rating: 4.9,
 	  	projectsCompleted: 70,
   		signedUpDuration: 1,
       availability: true,
-      skills: ['Childcare', 'First Aid', 'CPR', 'Cooking', 'Cleaning']
+      skills: ['HTML', 'CSS', 'JavaScript', 'Bootstrap', 'Responsive Design', 'SEO']
     },
     {
       name: 'David Wilson',
-      service: 'Gardener',
+      service: 'JavaScript Developer',
       description:
-      'A skilled gardener with experience maintaining lawns, gardens, and landscapes.',
+      'A JavaScript developer specializing in building and maintaining interactive web applications using modern frameworks and libraries.',
       image: 'freelancer-image.png',
       price: 45,
       rating: 4.7,
 	  	projectsCompleted: 60,
   		signedUpDuration: 1,
       availability: true,
-      skills: ['Lawn Care', 'Planting', 'Pruning', 'Weeding', 'Mulching']
+      skills: ['JavaScript', 'React', 'Node.js', 'Express', 'MongoDB', 'REST APIs']
     },
     {
       name: 'Sarah Martinez',
-      service: 'House Cleaner',
+      service: 'React Developer',
       description:
-      'A thorough and detail-oriented house cleaner with experience cleaning homes, apartments, and offices.',
+      'A React developer specializing in building and maintaining single-page applications and user interfaces for web applications.',
       image: 'freelancer-image.png',
-      price: 30,
+      price: 50,
       rating: 4.8,
 	  	projectsCompleted: 50,
 	  	signedUpDuration: 1,
       availability: true,
-      skills: ['Cleaning', 'Dusting', 'Vacuuming', 'Mopping', 'Laundry']
+      skills: ['React', 'JavaScript', 'HTML', 'CSS', 'Redux', 'Material-UI']
     },
     {
       name: 'Daniel Thompson',
-      service: 'Dog Walker',
+      service: 'Node.js Developer',
       description:
-      'A reliable and trustworthy dog walker with experience walking dogs of all breeds and sizes.',
+      'A Node.js developer specializing in building and maintaining server-side logic and APIs for web applications.',
       image: 'freelancer-image.png',
-      price: 20,
+      price: 45,
       rating: 4.9,
 		  projectsCompleted: 40,
 	  	signedUpDuration: 1,
       availability: true,
-      skills: ['Dog Walking', 'Pet Sitting', 'Feeding', 'Watering', 'Exercise']
+      skills: ['Node.js', 'Express', 'MongoDB', 'REST APIs', 'GraphQL', 'Socket.io']
     },
     {
       name: 'Olivia Garcia',
-      service: 'Tutor',
+      service: 'Web Application Developer',
       description:
-      'An experienced tutor with expertise in a variety of subjects, capable of helping students of all ages.',
+      'A web application developer specializing in building and maintaining custom web applications for businesses and organizations.',
       image: 'freelancer-image.png',
-      price: 40,
+      price: 55,
       rating: 4.7,
 		  projectsCompleted: 30,
 	    signedUpDuration: 1,
       availability: true,
-      skills: ['Math', 'Science', 'English', 'History', 'Foreign Language']
+      skills: ['HTML', 'CSS', 'JavaScript', 'Node.js', 'React', 'MongoDB']
     },
     {
       name: 'William Lee',
-      service: 'Personal Trainer',
+      service: 'Software Engineer (Web Development Focus)',
       description:
-      'A certified personal trainer with experience creating custom workout plans and providing fitness coaching.',
+      'A software engineer specializing in web development, capable of building and maintaining complex web applications and software solutions.',
       image: 'freelancer-image.png',
-      price: 40,
+      price: 60,
       rating: 4.6,
 		  projectsCompleted: 20,
   		signedUpDuration: 1,
       availability: true,
-      skills: ['Fitness Training', 'Strength Training', 'Cardio', 'Nutrition', 'Weight Loss']
+      skills: ['HTML', 'CSS', 'JavaScript', 'Node.js', 'React', 'MongoDB']
     }
   ]);
 
