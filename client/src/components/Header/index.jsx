@@ -13,11 +13,13 @@ import { FaUser, FaHistory, FaShoppingCart, FaCompass } from 'react-icons/fa';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import '../Cart/style.css';
+import Auth from '../../utils/auth';
 
 function Header() {
   const [isVisible, setIsVisible] = useState(true);
   const [opacity, setOpacity] = useState(1);
   let lastScrollY = window.scrollY;
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,6 +42,13 @@ function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    if (Auth.loggedIn()) {
+      const profile = Auth.getProfile();
+      setUserName(profile.data.firstName);
+    }
+  }, []);
+
   return (
     <Box
       as="header"
@@ -59,17 +68,38 @@ function Header() {
       }}
     >
       <Flex justify="space-between" align="center">
-        <Link to="/explore" style={{ textDecoration: 'none' }}>
-          <Text
-            as="h1"
-            style={{ color: 'var(--dark)' }}
-            fontSize="2xl"
-            fontWeight="bold"
-          >
-            Taskable
-          </Text>
-        </Link>
-        <Flex display={{ base: 'none', md: 'flex' }}>
+        <Flex align="center" gap={4} flex={1} justify="center">
+          <Link to="/" style={{ textDecoration: 'none', position: 'absolute', left: '20px' }}>
+            <Text
+              as="h1"
+              style={{ color: 'var(--dark)' }}
+              fontSize="2xl"
+              fontWeight="bold"
+            >
+              Taskable
+            </Text>
+          </Link>
+          {userName && (
+            <Text
+              color="var(--dark)"
+              fontSize="lg"
+              fontWeight="medium"
+              bg="rgba(255, 255, 255, 0.2)"
+              px={4}
+              py={2}
+              borderRadius="md"
+              backdropFilter="blur(10px)"
+              transition="all 0.3s ease"
+              _hover={{
+                bg: "rgba(255, 255, 255, 0.3)",
+                transform: "translateY(-2px)"
+              }}
+            >
+              Welcome, {userName}!
+            </Text>
+          )}
+        </Flex>
+        <Flex display={{ base: 'none', md: 'flex' }} position="absolute" right="20px">
           <Link to="/my-profile" className="icon-link" color="var(--dark)" mx={5}>
             <FaUser />
           </Link>

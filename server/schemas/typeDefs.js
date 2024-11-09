@@ -1,7 +1,8 @@
 const typeDefs = `
   type User {
     _id: ID
-    username: String!
+    firstName: String!
+    lastName: String!
     email: String!
     orders: [Order]
   }
@@ -17,7 +18,6 @@ const typeDefs = `
     projectsCompleted: Int
     signedUpDuration: Int
     availability: Boolean
-    skills: [String]
   }
 
   type Order {
@@ -44,7 +44,7 @@ const typeDefs = `
   }
 
   type Mutation {
-    addUser(username: String!, email: String!, password: String!): Auth
+    addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
     addOrder(freelancers: [ID]!): Order
     updateUser(userame: String, email: String, password: String): User
     updateFreelancer(_id: ID!, quantity: Int!): Freelancer

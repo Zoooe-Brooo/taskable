@@ -76,41 +76,20 @@ const resolvers = {
 	Mutation: {
 		addUser: async (_, { firstName, lastName, email, password }) => {
 			try {
-				// Create new user
 				const user = await User.create({
-					username: `${firstName} ${lastName}`,
+					firstName,
+					lastName,
 					email,
 					password,
 				});
 				const token = signToken(user);
-				// const token = jwt.sign(
-				// 	{ userId: user._id },
-				// 	process.env.JWT_SECRET,
-				// 	{ expiresIn: '1h' }
-				// );
-				// const transporter = nodemailer.createTransport({
-				// 	service: 'gmail',
-				// 	auth: {
-				// 		user: process.env.GMAIL_USER,
-				// 		pass: process.env.GMAIL_PASS,
-				// 	},
-				// });
-				// const mailOptions = {
-				// 	from: process.env.GMAIL_USER,
-				// 	to: email,
-				// 	subject: 'Welcome to Taskable!',
-				// 	text: `Hello ${firstName},\n\nThank you for signing up to Taskable. We hope you enjoy our service!\n\nBest regards,\nThe Taskable Team`,
-				// };
-
-				// await transporter.sendMail(mailOptions);
-
 				return {
 					token,
 					user,
 				};
 			} catch (err) {
-				console.error(err);
-				throw new Error('Something went wrong!');
+				console.error('Detailed error:', err);
+				throw new Error(err.message || 'Something went wrong!');
 			}
 		},
 		addOrder: async (parent, { freelancers }, context) => {

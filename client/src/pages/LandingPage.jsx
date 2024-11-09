@@ -28,6 +28,17 @@ const LandingPage = () => {
 	} = useDisclosure();
 
 	const letters = 'Taskable'.split('');
+
+	const handleSwitchToSignup = () => {
+		onLoginClose();
+		onSignupOpen();
+	};
+
+	const handleSwitchToLogin = () => {
+		onSignupClose();
+		onLoginOpen();
+	};
+
 	return (
 		<>
 			<Box
@@ -151,8 +162,16 @@ const LandingPage = () => {
 					</Box>
 				</HStack>
 			</Box>
-			<LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
-			<SignupModal isOpen={isSignupOpen} onClose={onSignupClose} />
+			<LoginModal 
+				isOpen={isLoginOpen} 
+				onClose={onLoginClose}
+				onSwitchToSignup={handleSwitchToSignup}
+			/>
+			<SignupModal 
+				isOpen={isSignupOpen} 
+				onClose={onSignupClose}
+				onSwitchToLogin={handleSwitchToLogin}
+			/>
 
 			{/* About Taskable Section */}
 			<Container maxW="container.2xl" py={{ base: 10, md: 20 }}>
@@ -215,10 +234,6 @@ const LandingPage = () => {
 							Sign up
 						</Button>
 					</VStack>
-					<SignupModal
-						isOpen={isSignupOpen}
-						onClose={onSignupClose}
-					/>
 				</HStack>
 			</Container>
 		</>

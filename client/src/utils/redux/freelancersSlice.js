@@ -28,40 +28,63 @@ const freelancersSlice = createSlice({
     freelancers: [],
     cart: [],
     cartOpen: false,
-    status: 'idle', // Can be 'idle', 'loading', 'succeeded', or 'failed'
+    status: 'idle',
+    error: null,
+    notification: null
   },
   reducers: {
     addToCart: (state, action) => {
+      const itemInCart = state.cart.find((item) => item._id === action.payload._id);
+      if (itemInCart) {
+        itemInCart.purchaseQuantity++;
+      } else {
+        state.cart.push({ ...action.payload });
+      }
       state.cartOpen = true;
-      state.cart.push(action.payload); // Add freelancer to cart
     },
     addMultipleToCart: (state, action) => {
-      state.cart.push(...action.payload); // Add multiple freelancers to cart
+      state.cart = [...action.payload];
     },
     removeFromCart: (state, action) => {
-      state.cart = state.cart.filter(freelancer => freelancer._id !== action.payload._id);
-      state.cartOpen = state.cart.length > 0; // Check if the cart is empty
+      state.cart = state.cart.filter(item => item._id !== action.payload._id);
+      state.cartOpen = state.cart.length > 0;
+    },
+    toggleCart: (state) => {
+      state.cartOpen = !state.cartOpen;
     },
     clearCart: (state) => {
-      state.cart = []; // Clear the cart
-      state.cartOpen = false; // Close the cart
+      state.cart = [];
+      state.cartOpen = false;
     },
+    clearNotification: (state) => {
+      state.notification = null;
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFreelancers.pending, (state) => {
-        state.status = 'loading'; // Loading freelancers
+        state.status = 'loading';
+        state.error = null;
       })
       .addCase(fetchFreelancers.fulfilled, (state, action) => {
-        state.status = 'succeeded'; // Successfully fetched freelancers
-        state.freelancers = action.payload; // Store freelancers in state
+        state.status = 'succeeded';
+        state.freelancers = action.payload;
+        state.error = null;
       })
-      .addCase(fetchFreelancers.rejected, (state) => {
-        state.status = 'failed'; // Failed to fetch freelancers
+      .addCase(fetchFreelancers.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
       });
-  },
+  }
 });
 
-export const { addToCart, addMultipleToCart, removeFromCart, clearCart } = freelancersSlice.actions;
+export const {
+  addToCart,
+  addMultipleToCart,
+  removeFromCart,
+  toggleCart,
+  clearCart,
+  clearNotification
+} = freelancersSlice.actions;
 
 export default freelancersSlice.reducer;

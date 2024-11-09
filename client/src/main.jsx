@@ -1,46 +1,3 @@
-// import App from './App.jsx';
-// import Home from './pages/Home';
-// import Detail from './pages/Detail';
-// import NoMatch from './pages/NoMatch';
-// import Login from './pages/Login';
-// import Signup from './pages/Signup';
-// import Success from './pages/Success';
-// import OrderHistory from './pages/OrderHistory';
-
-// const router = createBrowserRouter([
-// 	{
-// 		path: '/',
-// 		element: <App />,
-// 		error: <NoMatch />,
-// 		children: [
-// 			{
-// 				index: true,
-// 				element: <Home />,
-// 			},
-// 			{
-// 				path: '/login',
-// 				element: <Login />,
-// 			},
-// 			{
-// 				path: '/signup',
-// 				element: <Signup />,
-// 			},
-// 			{
-// 				path: '/success',
-// 				element: <Success />,
-// 			},
-// 			{
-// 				path: '/orderHistory',
-// 				element: <OrderHistory />,
-// 			},
-// 			{
-// 				path: '/products/:id',
-// 				element: <Detail />,
-// 			},
-// 		],
-// 	},
-// ]);
-
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
@@ -48,25 +5,54 @@ import LandingPage from './pages/LandingPage';
 import Explore from './pages/Explore';
 import Checkout from './pages/Checkout';
 import MyProfile from './pages/MyProfile';
-
 import OrderHistory from './pages/OrderHistory';
 import Cart from './components/Cart';
+import ErrorBoundary from './components/ErrorBoundary';
+import { Provider } from 'react-redux';
+import store from './utils/store';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+    errorElement: <ErrorBoundary />,
     children: [
-      { index: true, element: <LandingPage /> },
-      { path: 'explore', element: <Explore /> },
-      { path: 'checkout', element: <Checkout /> },
-      { path: 'my-profile', element: <MyProfile /> },
-      { path: 'orderHistory', element: <OrderHistory /> }, 
-      { path: 'cart', element: <Cart /> }, 
+      { 
+        index: true, 
+        element: <LandingPage />,
+        errorElement: <ErrorBoundary />
+      },
+      { 
+        path: 'explore', 
+        element: <Explore />,
+        errorElement: <ErrorBoundary />
+      },
+      { 
+        path: 'checkout', 
+        element: <Checkout />,
+        errorElement: <ErrorBoundary />
+      },
+      { 
+        path: 'my-profile', 
+        element: <MyProfile />,
+        errorElement: <ErrorBoundary />
+      },
+      { 
+        path: 'orderHistory', 
+        element: <OrderHistory />,
+        errorElement: <ErrorBoundary />
+      },
+      { 
+        path: 'cart', 
+        element: <Cart />,
+        errorElement: <ErrorBoundary />
+      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-	<RouterProvider router={router} />
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );
