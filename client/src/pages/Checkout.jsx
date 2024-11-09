@@ -2,10 +2,27 @@ import { Box, Flex, Image, Text, Button, VStack, HStack } from '@chakra-ui/react
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart } from '../utils/redux/freelancersSlice';
 import { idbPromise } from '../utils/helpers';
+import { useLazyQuery } from '@apollo/client';
+import { useEffect } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { QUERY_CHECKOUT } from '../utils/queries';
+import Auth from '../utils/auth';
+
+const stripePromise = loadStripe('pk_test_L1f0e3XAzjsG7jtp4uN7L9ql');
 
 const Checkout = () => {
   const cart = useSelector(state => state.freelancers.cart);
   const dispatch = useDispatch();
+
+  const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
+
+  useEffect(() => {
+    if (data && data.checkout && data.checkout.session) {
+      stripePromise.then((stripe) => {
+        stripe.redirectToCheckout({ sessionId: data.checkout.session });
+      });
+    }
+  }, [data]);  
 
   const calculateTotal = () => {
     return cart.reduce((sum, service) => sum + service.price * service.purchaseQuantity, 0).toFixed(2);
@@ -15,6 +32,22 @@ const Checkout = () => {
     dispatch(removeFromCart(item));
     idbPromise('cart', 'delete', item);
   };
+
+  function submitCheckout() {
+    const freelancerIds = [];
+
+    cart.forEach((item) => {
+      for (let i = 0; i < item.purchaseQuantity; i++) {
+        freelancerIds.push(item._id);
+      }
+    });
+
+    getCheckout({
+      variables: { freelancers: freelancerIds },
+    }).catch((error) => {
+      console.error("Error with checkout:", error);
+    });
+  }
 
   return (
     <Box p={5} bgGradient="linear(to-r, teal.500, green.500)" minH="100vh">
@@ -59,12 +92,23 @@ const Checkout = () => {
           <Text fontSize="lg" fontWeight="bold" color="gray.800">
             Total: ${calculateTotal()}
           </Text>
-          <Button 
-            colorScheme="teal"
-            onClick={() => {/* Stripe integration will go here */}}
-          >
-            Proceed to Payment
-          </Button>
+
+          {Auth.loggedIn() ? (
+            <Button 
+              colorScheme="teal"
+              onClick={() => submitCheckout()}
+            >
+              Proceed to Payment
+            </Button>
+            ) : (
+							<Button
+                colorScheme="teal"
+                // onClick={}
+              >
+								Login to Checkout
+							</Button>
+            )}
+          
         </HStack>
       </VStack>
     </Box>
