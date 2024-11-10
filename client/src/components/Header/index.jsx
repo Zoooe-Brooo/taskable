@@ -8,10 +8,12 @@ import {
 	MenuButton,
 	MenuList,
 	MenuItem,
+	Badge,
 } from '@chakra-ui/react';
 import { FaUser, FaShoppingCart, FaCompass } from 'react-icons/fa';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import '../Cart/style.css';
 import Auth from '../../utils/auth';
 
@@ -21,6 +23,14 @@ function Header() {
 	let lastScrollY = window.scrollY;
 	const [userName, setUserName] = useState('');
 	const [showWelcome, setShowWelcome] = useState(true);
+
+	// Access the cart state from Redux
+	const cart = useSelector((state) => state.freelancers.cart);
+	// Calculate total items in the cart
+	const cartItemCount = cart.reduce(
+		(total, item) => total + item.purchaseQuantity,
+		0
+	);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -124,30 +134,57 @@ function Header() {
 					position="absolute"
 					right="20px"
 				>
-					<Link
-						to="/my-profile"
-						className="icon-link"
-						color="var(--dark)"
-						mx={5}
-					>
-						<FaUser />
-					</Link>
-					<Link
-						to="/explore"
-						className="icon-link"
-						color="var(--dark)"
-						mx={5}
-					>
-						<FaCompass />
-					</Link>
-					<Link
-						to="/checkout"
-						className="icon-link"
-						color="var(--dark)"
-						mx={5}
-					>
-						<FaShoppingCart />
-					</Link>
+					{/* Profile Icon */}
+					<Box position="relative" display="inline-block" mx={5}>
+						<Link
+							to="/my-profile"
+							className="icon-link"
+							color="var(--dark)"
+						>
+							<FaUser />
+						</Link>
+					</Box>
+
+					{/* Explore Icon */}
+					<Box position="relative" display="inline-block" mx={5}>
+						<Link
+							to="/explore"
+							className="icon-link"
+							color="var(--dark)"
+						>
+							<FaCompass />
+						</Link>
+					</Box>
+
+					{/* Shopping Cart Icon with Badge */}
+					<Box position="relative" display="inline-block" mx={5}>
+						<Link
+							to="/checkout"
+							className="icon-link"
+							color="var(--dark)"
+						>
+							<FaShoppingCart />
+							{cartItemCount > 0 && (
+								<Badge
+									colorScheme="red"
+									borderRadius="full"
+									position="absolute"
+									top="25px"
+									right="-5px"
+									fontSize="0.6em"
+									p={0.5}
+									width="15px"
+									height="15px"
+									display="flex"
+									alignItems="center"
+									justifyContent="center"
+									zIndex="1"
+								>
+									{cartItemCount}
+								</Badge>
+							)}
+						</Link>
+					</Box>
 				</Flex>
 				<Box display={{ base: 'flex', md: 'none' }}>
 					<Menu>
