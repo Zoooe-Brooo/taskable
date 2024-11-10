@@ -6,7 +6,16 @@ import {
 	Button,
 	VStack,
 	HStack,
+	useDisclosure,
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+	Icon,
 } from '@chakra-ui/react';
+import { FaTimesCircle } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart } from '../utils/redux/freelancersSlice';
 import { idbPromise } from '../utils/helpers';
@@ -22,6 +31,8 @@ const stripePromise = loadStripe('pk_test_L1f0e3XAzjsG7jtp4uN7L9ql');
 const Checkout = () => {
 	const cart = useSelector((state) => state.freelancers.cart);
 	const dispatch = useDispatch();
+
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
@@ -49,19 +60,24 @@ const Checkout = () => {
 	};
 
 	function submitCheckout() {
-		const freelancerIds = [];
+		if (cart.length === 0) {
+			// Check if cart is empty
+			onOpen(); // Open warning modal if cart is empty
+		} else {
+			const freelancerIds = [];
 
-		cart.forEach((item) => {
-			for (let i = 0; i < item.purchaseQuantity; i++) {
-				freelancerIds.push(item._id);
-			}
-		});
+			cart.forEach((item) => {
+				for (let i = 0; i < item.purchaseQuantity; i++) {
+					freelancerIds.push(item._id);
+				}
+			});
 
-		getCheckout({
-			variables: { freelancers: freelancerIds },
-		}).catch((error) => {
-			console.error('Error with checkout:', error);
-		});
+			getCheckout({
+				variables: { freelancers: freelancerIds },
+			}).catch((error) => {
+				console.error('Error with checkout:', error);
+			});
+		}
 	}
 
 	return (
@@ -148,6 +164,47 @@ const Checkout = () => {
 					)}
 				</HStack>
 			</VStack>
+
+			<Modal isOpen={isOpen} onClose={onClose} isCentered>
+				<ModalOverlay backdropFilter="blur(5px)" />
+
+				<ModalContent
+					borderRadius="md"
+					maxW="sm"
+					textAlign="center"
+					p={6}
+				>
+					<ModalHeader>
+						<VStack spacing={2}>
+							<Icon
+								as={FaTimesCircle}
+								color="red.500"
+								boxSize={12}
+							/>
+							<Text
+								fontSize="xl"
+								fontWeight="bold"
+								color="gray.700"
+							>
+								Uh Oh!
+							</Text>
+						</VStack>
+					</ModalHeader>
+
+					<ModalBody>
+						<Text color="gray.600" fontSize="md">
+							Can not proceed to payment because there are no
+							items added to the cart.
+						</Text>
+					</ModalBody>
+
+					<ModalFooter justifyContent="center">
+						<Button colorScheme="teal" onClick={onClose} px={8}>
+							Close
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</Box>
 	);
 };
