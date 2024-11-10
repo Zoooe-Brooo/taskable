@@ -10,9 +10,10 @@ import {
 	Container,
 	useDisclosure,
 } from '@chakra-ui/react';
-// import { Link } from 'react-router-dom'; will use later
+import { Link } from 'react-router-dom';
 import LoginModal from '../components/LoginModal';
 import SignupModal from '../components/SignupModal';
+import Auth from '../utils/auth';
 // import { useState } from 'react'; will use later
 
 const LandingPage = () => {
@@ -116,35 +117,52 @@ const LandingPage = () => {
 							<br />
 							with our network of skilled developers.
 						</Text>
-						<Stack direction="row" spacing={4} justify="center">
+						{Auth.loggedIn() ? (
+							// Show this button if the user is logged in
 							<Button
+								as={Link}
+								to="/explore"
 								colorScheme="gray"
-								size="lg"
-								mt={6}
-								px={8}
-								py={6}
-								fontSize="lg"
+								size={{ base: 'md', md: 'lg' }}
+								fontSize={{ base: 'md', md: 'lg', lg: 'xl' }}
+								mt={4}
+								px={{ base: 4, md: 8 }}
+								py={{ base: 3, md: 6 }}
 								borderRadius="md"
-								variant="solid"
-								onClick={onLoginOpen}
 							>
-								Login
+								Find your matching freelancers now 🤩
 							</Button>
+						) : (
+							<Stack direction="row" spacing={4} justify="center">
+								<Button
+									colorScheme="gray"
+									size="lg"
+									mt={6}
+									px={8}
+									py={6}
+									fontSize="lg"
+									borderRadius="md"
+									variant="solid"
+									onClick={onLoginOpen}
+								>
+									Login
+								</Button>
 
-							<Button
-								colorScheme="gray"
-								size="lg"
-								mt={6}
-								px={8}
-								py={6}
-								fontSize="lg"
-								borderRadius="md"
-								variant="solid"
-								onClick={onSignupOpen}
-							>
-								Sign Up
-							</Button>
-						</Stack>
+								<Button
+									colorScheme="gray"
+									size="lg"
+									mt={6}
+									px={8}
+									py={6}
+									fontSize="lg"
+									borderRadius="md"
+									variant="solid"
+									onClick={onSignupOpen}
+								>
+									Sign Up
+								</Button>
+							</Stack>
+						)}
 					</VStack>
 
 					{/* Right Content */}
@@ -162,13 +180,13 @@ const LandingPage = () => {
 					</Box>
 				</HStack>
 			</Box>
-			<LoginModal 
-				isOpen={isLoginOpen} 
+			<LoginModal
+				isOpen={isLoginOpen}
 				onClose={onLoginClose}
 				onSwitchToSignup={handleSwitchToSignup}
 			/>
-			<SignupModal 
-				isOpen={isSignupOpen} 
+			<SignupModal
+				isOpen={isSignupOpen}
 				onClose={onSignupClose}
 				onSwitchToLogin={handleSwitchToLogin}
 			/>
@@ -226,13 +244,29 @@ const LandingPage = () => {
 							</Text>{' '}
 							is here to help you make it a reality.
 						</Text>
-						<Button
-							colorScheme="teal"
-							size="lg"
-							onClick={onSignupOpen}
-						>
-							Sign up
-						</Button>
+						{Auth.loggedIn() ? (
+							<Button
+								as={Link}
+								to="/explore"
+								colorScheme="teal"
+								size={{ base: 'md', md: 'lg' }}
+								fontSize={{ base: 'md', md: 'lg', lg: 'xl' }}
+								mt={2}
+								px={{ base: 4, md: 8 }}
+								py={{ base: 3, md: 6 }}
+								borderRadius="md"
+							>
+								Find your matching freelancers now 🤩
+							</Button>
+						) : (
+							<Button
+								colorScheme="teal"
+								size="lg"
+								onClick={onSignupOpen}
+							>
+								Sign up
+							</Button>
+						)}
 					</VStack>
 				</HStack>
 			</Container>
