@@ -295,10 +295,12 @@ const MyProfile = () => {
 							/>
 							<Text
 								color="white"
-								position="absolute"
-								right="0"
-								top="-25px"
+								position={{ base: 'static', md: 'absolute' }}
+								right={{ md: '0' }}
+								top={{ md: '-25px' }}
 								fontSize="sm"
+								mt={{ base: 2, md: 0 }}
+								textAlign={{ base: 'center', md: 'right' }}
 							>
 								75% Complete
 							</Text>
@@ -339,10 +341,12 @@ const MyProfile = () => {
 							/>
 							<Text
 								color="white"
-								position="absolute"
-								right="0"
-								top="-25px"
+								position={{ base: 'static', md: 'absolute' }}
+								right={{ md: '0' }}
+								top={{ md: '-25px' }}
 								fontSize="sm"
+								mt={{ base: 2, md: 0 }}
+								textAlign={{ base: 'center', md: 'right' }}
 							>
 								30% Complete
 							</Text>
@@ -383,10 +387,12 @@ const MyProfile = () => {
 							/>
 							<Text
 								color="white"
-								position="absolute"
-								right="0"
-								top="-25px"
+								position={{ base: 'static', md: 'absolute' }}
+								right={{ md: '0' }}
+								top={{ md: '-25px' }}
 								fontSize="sm"
+								mt={{ base: 2, md: 0 }}
+								textAlign={{ base: 'center', md: 'right' }}
 							>
 								50% Complete
 							</Text>
