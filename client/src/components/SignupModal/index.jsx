@@ -26,10 +26,10 @@ import { useNavigate } from 'react-router-dom';
 function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 	const [showPassword, setShowPassword] = useState(false);
 	const [formData, setFormData] = useState({
-			firstName: '',
-			lastName: '',
-			email: '',
-			password: '',
+		firstName: '',
+		lastName: '',
+		email: '',
+		password: '',
 	});
 	const toast = useToast();
 	const navigate = useNavigate();
@@ -48,7 +48,12 @@ function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 
 	const handleSignup = async () => {
 		// Validate all fields are filled
-		if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+		if (
+			!formData.firstName ||
+			!formData.lastName ||
+			!formData.email ||
+			!formData.password
+		) {
 			toast({
 				title: 'Error',
 				description: 'Please fill in all fields',
@@ -106,7 +111,9 @@ function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 			console.error('GraphQL errors:', error.graphQLErrors);
 			toast({
 				title: 'Error',
-				description: error.message || 'Could not create account. Please try again.',
+				description:
+					error.message ||
+					'Could not create account. Please try again.',
 				status: 'error',
 				duration: 3000,
 				isClosable: true,
@@ -123,10 +130,12 @@ function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 					Sign up with
 				</ModalHeader>
 				<ModalCloseButton />
-				<form onSubmit={(e) => {
-					e.preventDefault();
-					handleSignup();
-				}}>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						handleSignup();
+					}}
+				>
 					<ModalBody>
 						{/* Social Signup Buttons */}
 						<HStack justifyContent="center" mb={4}>
@@ -209,17 +218,25 @@ function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 								value={formData.password}
 								onChange={handleChange}
 								pr="4.5rem"
+								mb={2}
 							/>
 							{formData.password && (
 								<IconButton
-									icon={showPassword ? <FaEyeSlash /> : <FaEye />}
+									icon={
+										showPassword ? (
+											<FaEyeSlash />
+										) : (
+											<FaEye />
+										)
+									}
 									onClick={togglePasswordVisibility}
 									aria-label="Toggle password visibility"
 									variant="ghost"
-									size="sm"
+									size="xs"
 									position="absolute"
-									top="50%"
-									right="0.5rem"
+									top="65%"
+									right="5px"
+									p="0"
 									transform="translateY(-50%)"
 									zIndex="1"
 								/>
