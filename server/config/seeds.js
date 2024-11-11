@@ -1,5 +1,5 @@
 const db = require('./connection');
-const { User, Freelancer } = require('../models');
+const { User, Freelancer, Order } = require('../models');
 const cleanDB = require('./cleanDB');
 
 db.once('open', async () => {
@@ -141,6 +141,13 @@ db.once('open', async () => {
 
   console.log('freelancers seeded');
 
+  const order = await Order.create({
+    purchaseDate: new Date(new Date().setDate(new Date().getDate() - 10)).toLocaleString(),
+    freelancers: [freelancers[0]._id, freelancers[1]._id]
+  });
+
+  console.log('order seeded');
+
   await User.create({
     firstName: 'Pamela',
     lastName: 'Washington',
@@ -148,7 +155,9 @@ db.once('open', async () => {
     password: 'password12345',
     orders: [
       {
-        freelancers: [freelancers[0]._id, freelancers[1]._id]
+        _id: order._id,
+        purchaseDate: order.purchaseDate,
+        freelancers: order.freelancers
       }
     ]
   });

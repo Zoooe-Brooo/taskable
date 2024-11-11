@@ -36,13 +36,24 @@ const Checkout = () => {
 
 	const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
-	useEffect(() => {
-		if (data && data.checkout && data.checkout.session) {
-			stripePromise.then((stripe) => {
-				stripe.redirectToCheckout({ sessionId: data.checkout.session });
-			});
-		}
-	}, [data]);
+  useEffect(() => {
+    if (data && data.checkout && data.checkout.session) {
+  	stripePromise.then((stripe) => {
+  	  stripe.redirectToCheckout({ sessionId: data.checkout.session })
+      .then((result) => {
+  		if (result.error) {
+  		  console.error('Stripe error:', result.error.message);
+  		} else {
+  		  // Payment successful
+		    window.alert("Payment successful");
+  		  setTimeout(() => {
+			    window.location.href = '/MyProfile'; // Redirect to MyProfile page
+  		  }, 3000);
+  		}
+  	  });
+  	});
+    }
+  }, [data]);
 
 	const calculateTotal = () => {
 		return cart
