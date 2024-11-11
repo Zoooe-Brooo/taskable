@@ -1,6 +1,4 @@
-import React from 'react';
 import { 
-  Box, 
   Flex, 
   Image, 
   Text, 
@@ -11,9 +9,7 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalBody,
-  Divider
-} from '@chakra-ui/react';
+  ModalBody} from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../utils/redux/freelancersSlice';

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { useLazyQuery } from '@apollo/client';
 import { QUERY_CHECKOUT } from '../../utils/queries';
@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addMultipleToCart, toggleCart } from '../../utils/redux/freelancersSlice';
 import './style.css';
 import {
-  Box,
   Button,
   VStack,
   Text,
@@ -26,13 +25,20 @@ import {
 } from '@chakra-ui/react';
 import { FaShoppingCart } from 'react-icons/fa';
 
-const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+const stripePromise = loadStripe('pk_test_L1f0e3XAzjsG7jtp4uN7L9ql');
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const cart = useSelector(state => state.freelancers.cart);
-  const cartOpen = useSelector(state => state.freelancers.cartOpen);
-  const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
+  const cart = useSelector((state) => state.freelancers.cart);
+  const cartOpen = useSelector((state) => state.freelancers.cartOpen);
+  const [getCheckout, { data, error }] = useLazyQuery(QUERY_CHECKOUT);
+  const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    if (error) {
+      console.error('Error with checkout:', error);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (data) {
@@ -44,14 +50,18 @@ const Cart = () => {
 
   useEffect(() => {
     async function getCart() {
-      const cartItems = await idbPromise('cart', 'get');
-      dispatch(addMultipleToCart(cartItems));
+      const cart = await idbPromise('cart', 'get');
+      dispatch(addMultipleToCart([...cart]));
     }
 
     if (!cart.length) {
       getCart();
     }
   }, [cart.length, dispatch]);
+
+  useEffect(() => {
+    setTotalItems(cart.reduce((total, item) => total + item.purchaseQuantity, 0));
+  }, [cart]);
 
   const handleToggleCart = () => {
     dispatch(toggleCart());
@@ -66,16 +76,18 @@ const Cart = () => {
   }
 
   function submitCheckout() {
-    const productIds = [];
+    const freelancerIds = [];
 
     cart.forEach((item) => {
       for (let i = 0; i < item.purchaseQuantity; i++) {
-        productIds.push(item._id);
+        freelancerIds.push(item._id);
       }
     });
 
     getCheckout({
-      variables: { products: productIds },
+      variables: { freelancers: freelancerIds },
+    }).catch((error) => {
+      console.error('Error with checkout:', error);
     });
   }
 
@@ -91,7 +103,7 @@ const Cart = () => {
         p={3}
       >
         <Icon as={FaShoppingCart} boxSize={6} />
-        {cart.length > 0 && (
+        {totalItems > 0 && (
           <Badge
             position="absolute"
             top="-2"
@@ -99,7 +111,7 @@ const Cart = () => {
             colorScheme="red"
             borderRadius="full"
           >
-            {cart.length}
+            {totalItems}
           </Badge>
         )}
       </Button>
