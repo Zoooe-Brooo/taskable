@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { FaTimesCircle } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart } from '../utils/redux/freelancersSlice';
+import { removeFromCart, addMultipleToCart } from '../utils/redux/freelancersSlice';
 import { idbPromise } from '../utils/helpers';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect } from 'react';
@@ -36,6 +36,24 @@ const Checkout = () => {
 
 	const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
+	useEffect(() => {
+		async function getCart() {
+			const cart = await idbPromise('cart', 'get');
+			dispatch(addMultipleToCart([...cart]));
+		}
+
+		if (!cart.length) {
+			getCart();
+		}
+	}, [cart.length, dispatch]);
+
+	useEffect(() => {
+		if (data && data.checkout && data.checkout.session) {
+			stripePromise.then((stripe) => {
+				stripe.redirectToCheckout({ sessionId: data.checkout.session });
+			});
+		}
+	}, [data]);
 	useEffect(() => {
 		if (data && data.checkout && data.checkout.session) {
 			stripePromise.then((stripe) => {
@@ -81,8 +99,12 @@ const Checkout = () => {
 	}
 
 	return (
-		<Box p={5} bgGradient="linear(to-r, teal.500, green.500)" minH="100vh">
-			<VStack spacing={8} align="stretch">
+		<Box
+			p={10}
+			bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
+			minH="100vh"
+		>
+			<VStack spacing={6} align="stretch">
 				<Text
 					fontSize="3xl"
 					fontWeight="bold"
