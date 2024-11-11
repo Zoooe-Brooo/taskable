@@ -2,7 +2,7 @@ import {
 	Modal,
 	ModalOverlay,
 	ModalContent,
-	ModalHeader,
+	// ModalHeader,
 	ModalCloseButton,
 	ModalBody,
 	ModalFooter,
@@ -10,13 +10,13 @@ import {
 	FormControl,
 	FormLabel,
 	Input,
-	Divider,
+	// Divider,
 	IconButton,
 	Text,
-	HStack,
+	// HStack,
 	useToast,
 } from '@chakra-ui/react';
-import { FaGoogle, FaApple, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../../utils/mutations';
@@ -126,9 +126,9 @@ function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 			<ModalOverlay backdropFilter="blur(10px)" />{' '}
 			{/* Blurs the background */}
 			<ModalContent borderRadius="lg" p={6} bg="white" maxWidth="sm">
-				<ModalHeader textAlign="center" fontWeight="bold" fontSize="lg">
+				{/* <ModalHeader textAlign="center" fontWeight="bold" fontSize="lg">
 					Sign up with
-				</ModalHeader>
+				</ModalHeader> */}
 				<ModalCloseButton />
 				<form
 					onSubmit={(e) => {
@@ -138,7 +138,7 @@ function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 				>
 					<ModalBody>
 						{/* Social Signup Buttons */}
-						<HStack justifyContent="center" mb={4}>
+						{/* <HStack justifyContent="center" mb={4}>
 							<Button
 								leftIcon={<FaGoogle />}
 								variant="outline"
@@ -153,16 +153,16 @@ function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 							>
 								Apple
 							</Button>
-						</HStack>
+						</HStack> */}
 
 						{/* Divider with "or" */}
-						<HStack alignItems="center" my={4}>
+						{/* <HStack alignItems="center" my={4}>
 							<Divider />
 							<Text color="gray.500" fontSize="sm" px={2}>
 								or
 							</Text>
 							<Divider />
-						</HStack>
+						</HStack> */}
 
 						{/* First Name Input */}
 						<FormControl mb={4}>

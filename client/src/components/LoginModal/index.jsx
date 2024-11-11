@@ -2,7 +2,7 @@ import {
 	Modal,
 	ModalOverlay,
 	ModalContent,
-	ModalHeader,
+	// ModalHeader,
 	ModalCloseButton,
 	ModalBody,
 	ModalFooter,
@@ -10,12 +10,12 @@ import {
 	FormControl,
 	FormLabel,
 	Input,
-	Divider,
+	// Divider,
 	IconButton,
 	Text,
-	HStack,
+	// HStack,
 } from '@chakra-ui/react';
-import { FaGoogle, FaApple, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../../utils/mutations';
@@ -27,7 +27,7 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 	const [formState, setFormState] = useState({ email: '', password: '' });
 	const [login, { error }] = useMutation(LOGIN);
 	const toast = useToast();
-	const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+	// const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
@@ -83,13 +83,13 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 			<ModalOverlay backdropFilter="blur(10px)" />{' '}
 			{/* Blurs the background */}
 			<ModalContent borderRadius="lg" p={6} bg="white" maxWidth="sm">
-				<ModalHeader textAlign="center" fontWeight="bold" fontSize="lg">
+				{/* <ModalHeader textAlign="center" fontWeight="bold" fontSize="lg">
 					Login in with
-				</ModalHeader>
+				</ModalHeader> */}
 				<ModalCloseButton />
 				<form onSubmit={handleFormSubmit}>
 					<ModalBody>
-						{/* Social Login Buttons */}
+						{/* Social Login Buttons
 						<HStack justifyContent="center" mb={4}>
 							<Button
 								leftIcon={<FaGoogle />}
@@ -105,15 +105,15 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 							>
 								Apple
 							</Button>
-						</HStack>
+						</HStack> */}
 						{/* Divider with "or" */}
-						<HStack alignItems="center" my={4}>
+						{/* <HStack alignItems="center" my={4}>
 							<Divider />
 							<Text color="gray.500" fontSize="sm" px={2}>
 								or
 							</Text>
 							<Divider />
-						</HStack>
+						</HStack> */}
 						{/* Email Input */}
 						<FormControl mb={4} position="relative">
 							<FormLabel fontSize="sm" color="gray.700">
@@ -165,7 +165,7 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 							)}
 						</FormControl>
 						{/* Forgot Password Link */}
-						<Text
+						{/* <Text
 							color="teal.600"
 							fontSize="sm"
 							textAlign="right"
@@ -175,7 +175,7 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 							_hover={{ textDecoration: 'underline' }}
 						>
 							Forgot Password?
-						</Text>
+						</Text> */}
 					</ModalBody>
 					<ModalFooter flexDirection="column">
 						{/* Login Button */}
@@ -190,7 +190,7 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 
 						{/* Signup Link */}
 						<Text fontSize="md" color="gray.600">
-							Don't have an account?{' '}
+							Don&apost have an account?{' '}
 							<Text
 								as="span"
 								color="teal.600"
