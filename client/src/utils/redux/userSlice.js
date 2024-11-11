@@ -28,16 +28,16 @@ export const fetchUserProfile = createAsyncThunk(
   }
 );
 
-// // Load favorites from localStorage on initialization
-// const loadFavorites = () => {
-//   try {
-//     const savedFavorites = localStorage.getItem('favoriteServices');
-//     return savedFavorites ? JSON.parse(savedFavorites) : [];
-//   } catch (error) {
-//     console.error('Error loading favorites:', error);
-//     return [];
-//   }
-// };
+// Load favorites from localStorage on initialization
+const loadFavorites = () => {
+  try {
+    const savedFavorites = localStorage.getItem('favoriteServices');
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  } catch (error) {
+    console.error('Error loading favorites:', error);
+    return [];
+  }
+};
 
 const userSlice = createSlice({
   name: 'user',
@@ -46,30 +46,7 @@ const userSlice = createSlice({
     isAuthenticated: false,
     status: 'idle',
     error: null,
-    // favoriteServices: loadFavorites(),
-    // currentJobs: [
-    //   {
-    //     service: "Website Development",
-    //     provider: "John Smith",
-    //     progress: 75,
-    //     startDate: "2024-03-01",
-    //     estimatedCompletion: "2024-03-30"
-    //   },
-    //   {
-    //     service: "Mobile App Design",
-    //     provider: "Sarah Johnson",
-    //     progress: 30,
-    //     startDate: "2024-03-10",
-    //     estimatedCompletion: "2024-04-15"
-    //   },
-    //   {
-    //     service: "Database Optimization",
-    //     provider: "Mike Wilson",
-    //     progress: 90,
-    //     startDate: "2024-02-15",
-    //     estimatedCompletion: "2024-03-20"
-    //   }
-    // ],
+    favoriteServices: loadFavorites(),
   },
   reducers: {
     setUserData: (state, action) => {
@@ -80,32 +57,16 @@ const userSlice = createSlice({
       state.data = null;
       state.isAuthenticated = false;
     },
-    // setFavoriteServices: (state, action) => {
-    //   state.favoriteServices = action.payload;
-    // },
-    // addFavoriteService: (state, action) => {
-    //   const exists = state.favoriteServices.some(
-    //     service => service._id === action.payload._id
-    //   );
-    //   if (!exists) {
-    //     const newFavorite = {
-    //       ...action.payload,
-    //       image: `/images/profile-pics/${action.payload.name.split(' ')[0].toLowerCase()}.png`,
-    //       provider: action.payload.name
-    //     };
-    //     console.log('Adding new favorite:', newFavorite);
-    //     state.favoriteServices.push(newFavorite);
-    //     localStorage.setItem('favoriteServices', JSON.stringify(state.favoriteServices));
-    //     console.log('Updated favorites in localStorage:', localStorage.getItem('favoriteServices'));
-    //   }
-    // },
-    // removeFavoriteService: (state, action) => {
-    //   state.favoriteServices = state.favoriteServices.filter(
-    //     service => service._id !== action.payload._id
-    //   );
-    //   // Update localStorage
-    //   localStorage.setItem('favoriteServices', JSON.stringify(state.favoriteServices));
-    // }
+    addFavorite: (state, action) => {
+      state.favoriteServices.push(action.payload);
+      localStorage.setItem('favoriteServices', JSON.stringify(state.favoriteServices));
+    },
+    removeFavorite: (state, action) => {
+      state.favoriteServices = state.favoriteServices.filter(
+        service => service._id !== action.payload._id
+      );
+      localStorage.setItem('favoriteServices', JSON.stringify(state.favoriteServices));
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -125,6 +86,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { setUserData, clearUserData } = userSlice.actions;
-// export const { addFavoriteService, removeFavoriteService, setFavoriteServices } = userSlice.actions;
+export const { setUserData, clearUserData, addFavorite, removeFavorite } = userSlice.actions;
 export default userSlice.reducer;

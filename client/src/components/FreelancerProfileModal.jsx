@@ -20,6 +20,7 @@ import { addToCart } from '../utils/redux/freelancersSlice';
 // import { addFavoriteService, removeFavoriteService } from '../utils/redux/userSlice';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { idbPromise } from '../utils/helpers';
+import { addFavorite, removeFavorite } from '../utils/redux/userSlice';
 
 const FreelancerProfileModal = ({ freelancer, isOpen, onClose }) => {
   const dispatch = useDispatch();
@@ -32,9 +33,9 @@ const FreelancerProfileModal = ({ freelancer, isOpen, onClose }) => {
 
   const handleToggleFavorite = () => {
     if (isFavorite) {
-      dispatch(removeFavoriteService(freelancer));
+      dispatch(removeFavorite(freelancer));
     } else {
-      dispatch(addFavoriteService(freelancer));
+      dispatch(addFavorite(freelancer));
     }
   };
 
