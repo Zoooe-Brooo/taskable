@@ -7,26 +7,49 @@ import {
 	VStack,
 	Image,
 	Button,
-	Collapse,
+	useDisclosure,
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+	// Icon,
 	Grid,
+	Collapse,
 	useColorModeValue,
 } from '@chakra-ui/react';
 import Auth from '../utils/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { fetchUserProfile } from '../utils/redux/userSlice';
 import FreelancerProfileModal from '../components/FreelancerProfileModal';
 
 const MyProfile = () => {
 	const dispatch = useDispatch();
-    const user = useSelector((state) => state.user.data);
-    const status = useSelector((state) => state.user.status);
-    const error = useSelector((state) => state.user.error);
-    const favoriteServices = useSelector((state) => state.user.favoriteServices);
-    const navigate = useNavigate();
-    const [selectedFreelancer, setSelectedFreelancer] = useState(null);
-    const [expandedOrder, setExpandedOrder] = useState(null);
-    const bgColor = useColorModeValue('rgba(255, 255, 255, 0.1)', 'rgba(0, 0, 0, 0.5)');
-    const textColor = useColorModeValue('gray.800', 'white');
+	const user = useSelector((state) => state.user.data);
+	const status = useSelector((state) => state.user.status);
+	const error = useSelector((state) => state.user.error);
+	const favoriteServices = useSelector(
+		(state) => state.user.favoriteServices
+	);
+	const navigate = useNavigate();
+	const location = useLocation(); // to get query parameters
+	const { isOpen, onOpen, onClose } = useDisclosure(); // Modal controls
+	const [selectedFreelancer, setSelectedFreelancer] = useState(null);
+	const [expandedOrder, setExpandedOrder] = useState(null);
+	const bgColor = useColorModeValue(
+		'rgba(255, 255, 255, 0.1)',
+		'rgba(0, 0, 0, 0.5)'
+	);
+	const textColor = useColorModeValue('gray.800', 'white');
+
+	useEffect(() => {
+		// Check for session_id in the URL to trigger the thank-you modal
+		const searchParams = new URLSearchParams(location.search);
+		if (searchParams.get('session_id')) {
+			onOpen(); // Open thank-you modal if session_id is present
+		}
+	}, [location.search, onOpen]);
 
 	useEffect(() => {
 		if (status === 'idle') {
@@ -159,6 +182,25 @@ const MyProfile = () => {
 				</Flex>
 			</VStack>
 
+			{/* Thank You Modal */}
+			<Modal isOpen={isOpen} onClose={onClose} isCentered>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader textAlign="center">Thank You!</ModalHeader>
+					<ModalBody>
+						<Text textAlign="center" fontSize="lg">
+							Thanks for making a purchase. We hope you have a
+							great experience with us!
+						</Text>
+					</ModalBody>
+					<ModalFooter>
+						<Button colorScheme="teal" onClick={onClose} mx="auto">
+							Close
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+
 			<Box mt={8}>
 				<Text
 					fontSize="2xl"
@@ -182,8 +224,16 @@ const MyProfile = () => {
 							backdropFilter="blur(10px)"
 							border="1px solid rgba(255, 255, 255, 0.3)"
 						>
-							<Text fontSize="lg" fontWeight="bold" mb={2} color={textColor}>
-								Purchase Date: {new Date(Math.floor(order.purchaseDate)).toLocaleDateString()}
+							<Text
+								fontSize="lg"
+								fontWeight="bold"
+								mb={2}
+								color={textColor}
+							>
+								Purchase Date:{' '}
+								{new Date(
+									Math.floor(order.purchaseDate)
+								).toLocaleDateString()}
 							</Text>
 							<Button
 								onClick={() => toggleOrderDetails(order._id)}
@@ -191,9 +241,14 @@ const MyProfile = () => {
 								size="sm"
 								mb={4}
 							>
-								{expandedOrder === order._id ? 'See Less' : 'See More'}
+								{expandedOrder === order._id
+									? 'See Less'
+									: 'See More'}
 							</Button>
-							<Collapse in={expandedOrder === order._id} animateOpacity>
+							<Collapse
+								in={expandedOrder === order._id}
+								animateOpacity
+							>
 								<Grid templateColumns="repeat(1, 1fr)" gap={4}>
 									{order.freelancers.map((freelancer) => (
 										<Box
@@ -205,13 +260,23 @@ const MyProfile = () => {
 											transition="all 0.3s"
 											_hover={{ boxShadow: 'lg' }}
 										>
-											<Text fontSize="md" fontWeight="bold" color={textColor}>
+											<Text
+												fontSize="md"
+												fontWeight="bold"
+												color={textColor}
+											>
 												{freelancer.name}
 											</Text>
-											<Text fontWeight="bold" mb={2} color={textColor}>
+											<Text
+												fontWeight="bold"
+												mb={2}
+												color={textColor}
+											>
 												${freelancer.price}/hr
 											</Text>
-											<Text mb={2} color={textColor}>{freelancer.service}</Text>
+											<Text mb={2} color={textColor}>
+												{freelancer.service}
+											</Text>
 										</Box>
 									))}
 								</Grid>
