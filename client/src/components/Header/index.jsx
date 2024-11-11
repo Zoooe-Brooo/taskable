@@ -12,10 +12,13 @@ import {
 } from '@chakra-ui/react';
 import { FaUser, FaShoppingCart, FaCompass } from 'react-icons/fa';
 import { HamburgerIcon } from '@chakra-ui/icons';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useToast } from '@chakra-ui/react';
 import '../Cart/style.css';
 import Auth from '../../utils/auth';
+import { idbPromise } from '../../utils/helpers';
+import { addMultipleToCart } from '../../utils/redux/freelancersSlice';
 
 function Header() {
 	const [isVisible, setIsVisible] = useState(true);
@@ -23,7 +26,9 @@ function Header() {
 	let lastScrollY = window.scrollY;
 	const [userName, setUserName] = useState('');
 	const [showWelcome, setShowWelcome] = useState(true);
-
+	const dispatch = useDispatch();
+	const navigate = useNavigate(); // To redirect
+	const toast = useToast(); // To show toasts
 	// Access the cart state from Redux
 	const cart = useSelector((state) => state.freelancers.cart);
 	// Calculate total items in the cart
@@ -31,6 +36,19 @@ function Header() {
 		(total, item) => total + item.purchaseQuantity,
 		0
 	);
+	console.log(cartItemCount);
+	console.log(cart);
+
+	useEffect(() => {
+		async function getCart() {
+			const cart = await idbPromise('cart', 'get');
+			dispatch(addMultipleToCart([...cart]));
+		}
+
+		if (!cart.length) {
+			getCart();
+		}
+	}, [cart.length, dispatch]);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -62,7 +80,26 @@ function Header() {
 			setTimeout(() => setShowWelcome(false), 5000);
 		}
 	}, []);
+	// Function to handle profile link click
+	const handleProfileClick = (e) => {
+		// Prevent the default behavior of Link
+		e.preventDefault();
 
+		if (Auth.loggedIn()) {
+			// If the user is logged in, navigate to the profile page
+			navigate('/my-profile');
+		} else {
+			// If not logged in, show a toast message and navigate to login
+			toast({
+				title: 'Access Denied',
+				description: 'Please log in to access your profile.',
+				status: 'warning',
+				duration: 3000,
+				isClosable: true,
+			});
+			navigate('/');
+		}
+	};
 	return (
 		<Box
 			as="header"
@@ -140,6 +177,7 @@ function Header() {
 							to="/my-profile"
 							className="icon-link"
 							color="var(--dark)"
+							onClick={handleProfileClick}
 						>
 							<FaUser />
 						</Link>

@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFreelancers, addToCart, clearNotification } from '../utils/redux/freelancersSlice';
+import {
+	fetchFreelancers,
+	addToCart,
+	clearNotification,
+} from '../utils/redux/freelancersSlice';
 import { Box, Flex, Image, Text, Button } from '@chakra-ui/react';
 import FreelancerProfileModal from '../components/FreelancerProfileModal';
 import SearchFilters from '../components/SearchFilters';
 
 const Explore = () => {
 	const dispatch = useDispatch();
-	const freelancers = useSelector(state => state.freelancers.freelancers);
-	const status = useSelector(state => state.freelancers.status);
-	const error = useSelector(state => state.freelancers.error);
+	const freelancers = useSelector((state) => state.freelancers.freelancers);
+	const status = useSelector((state) => state.freelancers.status);
+	const error = useSelector((state) => state.freelancers.error);
 	const [selectedFreelancer, setSelectedFreelancer] = useState(null);
 	const [filters, setFilters] = useState({
 		search: '',
 		category: '',
-		priceRange: [0, 200]
+		priceRange: [0, 200],
 	});
 
 	useEffect(() => {
@@ -39,48 +43,59 @@ const Explore = () => {
 	};
 
 	const handleFilterChange = (filterType, value) => {
-		setFilters(prev => ({
+		setFilters((prev) => ({
 			...prev,
-			[filterType]: value
+			[filterType]: value,
 		}));
 	};
 
-	const filteredFreelancers = freelancers.filter(freelancer => {
-		const matchesSearch = freelancer.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-							 freelancer.service.toLowerCase().includes(filters.search.toLowerCase());
-		const matchesCategory = !filters.category || freelancer.category === filters.category;
-		const matchesPrice = freelancer.price >= filters.priceRange[0] && 
-							freelancer.price <= filters.priceRange[1];
-		
+	const filteredFreelancers = freelancers.filter((freelancer) => {
+		const matchesSearch =
+			freelancer.name
+				.toLowerCase()
+				.includes(filters.search.toLowerCase()) ||
+			freelancer.service
+				.toLowerCase()
+				.includes(filters.search.toLowerCase());
+		const matchesCategory =
+			!filters.category || freelancer.category === filters.category;
+		const matchesPrice =
+			freelancer.price >= filters.priceRange[0] &&
+			freelancer.price <= filters.priceRange[1];
+
 		return matchesSearch && matchesCategory && matchesPrice;
 	});
 
 	const renderContent = () => {
 		if (status === 'loading') {
 			return (
-				<Flex 
-					justify="center" 
-					align="center" 
+				<Flex
+					justify="center"
+					align="center"
 					minH="100vh"
 					bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
 				>
-					<Text color="white" fontSize="xl">Loading freelancers...</Text>
+					<Text color="white" fontSize="xl">
+						Loading freelancers...
+					</Text>
 				</Flex>
 			);
 		}
 
 		if (error) {
 			return (
-				<Flex 
+				<Flex
 					direction="column"
-					justify="center" 
-					align="center" 
+					justify="center"
+					align="center"
 					minH="100vh"
 					bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
 				>
-					<Text color="white" fontSize="xl" mb={4}>Error: {error}</Text>
-					<Button 
-						colorScheme="teal" 
+					<Text color="white" fontSize="xl" mb={4}>
+						Error: {error}
+					</Text>
+					<Button
+						colorScheme="teal"
 						onClick={() => dispatch(fetchFreelancers())}
 					>
 						Try Again
@@ -91,14 +106,15 @@ const Explore = () => {
 
 		return (
 			<Box bgGradient="linear(to-tl, #3AAFA9, #2B7A78)" minH="100vh">
-				<SearchFilters onFilterChange={handleFilterChange} filters={filters} />
-				<Flex
-					wrap="wrap"
-					justify="center"
-					p={10}
-				>
+				<SearchFilters
+					onFilterChange={handleFilterChange}
+					filters={filters}
+				/>
+				<Flex wrap="wrap" justify="center" p={10}>
 					{filteredFreelancers.map((freelancer) => {
-						const firstName = freelancer.name.split(' ')[0].toLowerCase();
+						const firstName = freelancer.name
+							.split(' ')[0]
+							.toLowerCase();
 						return (
 							<Box
 								key={freelancer._id}
@@ -126,17 +142,28 @@ const Explore = () => {
 									boxSize="200px"
 									mb={4}
 								/>
-								<Text fontSize="xl" fontWeight="bold" mb={2} color="white">
+								<Text
+									fontSize="xl"
+									fontWeight="bold"
+									mb={2}
+									color="white"
+								>
 									{freelancer.name}
 								</Text>
-								<Text mb={2} color="white">{freelancer.service}</Text>
-								<Text mb={2} color="white">{freelancer.description}</Text>
+								<Text mb={2} color="white">
+									{freelancer.service}
+								</Text>
+								<Text mb={2} color="white">
+									{freelancer.description}
+								</Text>
 								<Text fontWeight="bold" mb={4} color="white">
 									${freelancer.price}/hr
 								</Text>
 								<Button
 									colorScheme="teal"
-									onClick={() => handleViewProfile(freelancer)}
+									onClick={() =>
+										handleViewProfile(freelancer)
+									}
 								>
 									View Profile
 								</Button>
@@ -153,9 +180,9 @@ const Explore = () => {
 			{renderContent()}
 			{selectedFreelancer && (
 				<FreelancerProfileModal
-						freelancer={selectedFreelancer}
-						isOpen={!!selectedFreelancer}
-						onClose={handleCloseModal}
+					freelancer={selectedFreelancer}
+					isOpen={!!selectedFreelancer}
+					onClose={handleCloseModal}
 				/>
 			)}
 		</>
