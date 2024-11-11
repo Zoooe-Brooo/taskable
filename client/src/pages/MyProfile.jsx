@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	Box,
@@ -6,63 +6,44 @@ import {
 	Text,
 	VStack,
 	Image,
-	Progress,
 	Button,
 } from '@chakra-ui/react';
-import FreelancerProfileModal from '../components/FreelancerProfileModal';
 import Auth from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserProfile } from '../utils/redux/userSlice';
-import { createSelector } from '@reduxjs/toolkit';
 
-const selectUserData = createSelector(
-	(state) => state.user,
-	(user) => ({
-		profile: user.profile,
-		status: user.status,
-		error: user.error,
-		favoriteServices: user.favoriteServices || [],
-	})
-);
+// import FreelancerProfileModal from '../components/FreelancerProfileModal';
+// import { createSelector } from '@reduxjs/toolkit';
+
+// const selectUserData = createSelector(
+// 	(state) => state.user,
+// 	(user) => ({
+// 		profile: user.profile,
+// 		status: user.status,
+// 		error: user.error,
+// 		favoriteServices: user.favoriteServices || [],
+// 	})
+// );
 
 const MyProfile = () => {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	const { profile, status, error, favoriteServices } =
-		useSelector(selectUserData);
-	const [selectedService, setSelectedService] = useState(null);
-
-	const handleSignOut = () => {
-		Auth.logout();
-		navigate('/');
-	};
+    const user = useSelector((state) => state.user.data);
+    const status = useSelector((state) => state.user.status);
+    const error = useSelector((state) => state.user.error);
+    const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!Auth.loggedIn()) {
-			navigate('/');
-		} else {
-			const savedFavorites = localStorage.getItem('favoriteServices');
-			if (savedFavorites) {
-				try {
-					const parsedFavorites = JSON.parse(savedFavorites);
-					dispatch({
-						type: 'user/setFavoriteServices',
-						payload: parsedFavorites,
-					});
-				} catch (error) {
-					console.error('Error parsing favorites:', error);
-				}
-			}
-			if (!profile) {
-				dispatch(fetchUserProfile());
-			}
+		if (status === 'idle') {
+		  dispatch(fetchUserProfile());
 		}
-	}, [dispatch, navigate, profile]);
+	  }, [dispatch, status]);
 
 	useEffect(() => {
-		console.log('Favorite services updated:', favoriteServices);
-	}, [favoriteServices]);
-
+		if (status === 'succeeded' && !user) {
+		  navigate('/');
+		}
+	}, [status, user, navigate]);
+	
 	if (status === 'loading') {
 		return (
 			<Box
@@ -76,55 +57,164 @@ const MyProfile = () => {
 			</Box>
 		);
 	}
-
-	if (
-		error &&
-		error !== "Cannot read properties of null (reading 'orders')"
-	) {
+	
+	if (status === 'failed') {
+		console.log(error); // Log the error to the console
 		return (
-			<Box
-				p={10}
-				bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
-				minH="100vh"
-			>
-				<Text color="white" fontSize="xl" textAlign="center">
-					Error loading profile: {error}
-				</Text>
-				<Button
-					onClick={() => dispatch(fetchUserProfile())}
-					mt={4}
-					colorScheme="teal"
-				>
-					Retry
-				</Button>
-			</Box>
+		  <Box
+			p={10}
+			bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
+			minH="100vh"
+		  >
+			<Text color="white" fontSize="xl" textAlign="center">
+			  Error: {error}
+			</Text>
+		  </Box>
 		);
 	}
 
-	if (!profile) {
-		return (
-			<Box
-				p={10}
-				bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
-				minH="100vh"
-			>
-				<Text color="white" fontSize="xl" textAlign="center">
-					No profile data available
-				</Text>
-			</Box>
-		);
+	if (!user) {
+		navigate('/');
+		return null;
 	}
 
-	const handleViewDetails = (service) => {
-		setSelectedService(service);
+	const handleSignOut = () => {
+		Auth.logout();
+		navigate('/');
 	};
 
-	const handleCloseModal = () => {
-		setSelectedService(null);
-	};
+	// const handleViewDetails = (service) => {
+	// 	setSelectedService(service);
+	// };
+
+	// const handleCloseModal = () => {
+	// 	setSelectedService(null);
+	// };
+
 
 	return (
 		<Box
+			p={10}
+			mt={4}
+			bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
+			minH="100vh"
+		>
+			
+			<VStack spacing={8} align="stretch">
+				<Flex align="center" justify="space-between" width="100%">
+					<Flex align="center">
+						<Box
+							position="relative"
+							borderRadius="full"
+							boxSize="150px"
+							overflow="hidden"
+							border="3px solid white"
+							boxShadow="0 4px 30px rgba(0, 0, 0, 0.2)"
+						>
+							<Image
+								src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba"
+								alt="Profile Picture"
+								width="100%"
+								height="100%"
+								objectFit="cover"
+								transition="transform 0.3s ease"
+								_hover={{
+									transform: 'scale(1.1)',
+								}}
+							/>
+						</Box>
+						<VStack align="start" ml={8} spacing={3}>
+							<Text
+								fontSize="3xl"
+								fontWeight="bold"
+								color="white"
+								textShadow="2px 2px 4px rgba(0,0,0,0.2)"
+							>
+								{user.firstName} {user.lastName}
+							</Text>
+							<Text
+								fontSize="lg"
+								color="whiteAlpha.900"
+								bg="rgba(0,0,0,0.2)"
+								px={4}
+								py={2}
+								borderRadius="full"
+							>
+								{user.email}
+							</Text>
+						</VStack>
+					</Flex>
+					<Button
+						ml={4}
+						colorScheme="red"
+						onClick={handleSignOut}
+						size="md"
+						boxShadow="lg"
+						_hover={{
+							transform: 'translateY(-2px)',
+							boxShadow: 'xl',
+						}}
+						transition="all 0.2s"
+					>
+						Sign Out
+					</Button>
+				</Flex>
+			</VStack>
+
+			<Box>
+				<Text
+					fontSize="2xl"
+					fontWeight="bold"
+					mb={4}
+					color="white"
+					textAlign="center"
+				>
+					Order History
+				</Text>
+				{user.orders.map((order) => (
+					<Box
+						key={order._id}
+						bg="rgba(255, 255, 255, 0.1)"
+						p={4}
+						borderRadius="lg"
+						backdropFilter="blur(10px)"
+						mb={4}
+					>
+						<Text fontSize="xl" fontWeight="bold" mb={2} color="white">
+						    Purchase Date: {new Date(Math.floor(order.purchaseDate)).toLocaleDateString()}
+						</Text>
+					    {order.freelancers.map((freelancer) => {
+						    return (
+							<Box
+								key={freelancer._id}
+								bg="rgba(255, 255, 255, 0.1)"
+						        p={4}
+						        borderRadius="lg"
+						        backdropFilter="blur(10px)"
+						        mb={4}
+							>
+								<Text fontSize="lg" fontWeight="bold" color="white">
+									{freelancer.name}  
+								</Text>
+								<Text fontWeight="bold" mb={4} color="white">
+									${freelancer.price}/hr
+								</Text>
+								<Text mb={2} color="white">{freelancer.service}</Text>
+							</Box>
+						    );
+					    })}
+					</Box>
+				))}
+			</Box>
+
+		</Box>
+	);
+};
+
+export default MyProfile;
+
+
+{/* <Box
 			p={10}
 			mt={4}
 			bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
@@ -261,7 +351,7 @@ const MyProfile = () => {
 					>
 						Current Jobs
 					</Text>
-					{/* First Job */}
+					{/* First Job 
 					<Box
 						bg="rgba(255, 255, 255, 0.1)"
 						p={4}
@@ -307,7 +397,7 @@ const MyProfile = () => {
 						</Box>
 					</Box>
 
-					{/* Second Job */}
+					{/* Second Job 
 					<Box
 						bg="rgba(255, 255, 255, 0.1)"
 						p={4}
@@ -353,7 +443,7 @@ const MyProfile = () => {
 						</Box>
 					</Box>
 
-					{/* Third Job */}
+					{/* Third Job 
 					<Box
 						bg="rgba(255, 255, 255, 0.1)"
 						p={4}
@@ -408,8 +498,4 @@ const MyProfile = () => {
 					/>
 				)}
 			</VStack>
-		</Box>
-	);
-};
-
-export default MyProfile;
+		</Box> */}

@@ -52,6 +52,9 @@ export const QUERY_USER = gql`
           price
           image
           rating
+          projectsCompleted
+          signedUpDuration
+          availability
         }
       }
     }
@@ -65,10 +68,15 @@ export const QUERY_ORDER = gql`
       purchaseDate
       freelancers {
         _id
-          name
-          service
-          price
-          availability
+        name
+        service
+        description
+        image
+        price
+        rating
+        projectsCompleted
+        signedUpDuration
+        availability
       }
     }
   }

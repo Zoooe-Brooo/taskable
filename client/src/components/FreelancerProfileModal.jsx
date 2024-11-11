@@ -17,7 +17,7 @@ import {
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../utils/redux/freelancersSlice';
-import { addFavoriteService, removeFavoriteService } from '../utils/redux/userSlice';
+// import { addFavoriteService, removeFavoriteService } from '../utils/redux/userSlice';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { idbPromise } from '../utils/helpers';
 
