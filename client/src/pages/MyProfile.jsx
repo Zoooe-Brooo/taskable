@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	Box,
@@ -11,6 +11,7 @@ import {
 import Auth from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserProfile } from '../utils/redux/userSlice';
+import FreelancerProfileModal from '../components/FreelancerProfileModal';
 
 // import FreelancerProfileModal from '../components/FreelancerProfileModal';
 // import { createSelector } from '@reduxjs/toolkit';
@@ -30,7 +31,9 @@ const MyProfile = () => {
     const user = useSelector((state) => state.user.data);
     const status = useSelector((state) => state.user.status);
     const error = useSelector((state) => state.user.error);
+    const favoriteServices = useSelector((state) => state.user.favoriteServices);
     const navigate = useNavigate();
+    const [selectedFreelancer, setSelectedFreelancer] = useState(null);
 
 	useEffect(() => {
 		if (status === 'idle') {
@@ -83,14 +86,13 @@ const MyProfile = () => {
 		navigate('/');
 	};
 
-	// const handleViewDetails = (service) => {
-	// 	setSelectedService(service);
-	// };
+	const handleViewProfile = (service) => {
+		setSelectedFreelancer(service);
+	};
 
-	// const handleCloseModal = () => {
-	// 	setSelectedService(null);
-	// };
-
+	const handleCloseModal = () => {
+		setSelectedFreelancer(null);
+	};
 
 	return (
 		<Box
@@ -207,6 +209,63 @@ const MyProfile = () => {
 				))}
 			</Box>
 
+			<Box>
+				<Text
+					fontSize="2xl"
+					fontWeight="bold"
+					mb={4}
+					color="white"
+					textAlign="center"
+				>
+					My Favorite Services
+				</Text>
+				<Flex wrap="wrap" justify="center">
+					{favoriteServices?.map((service, index) => (
+						<Box
+							key={index}
+							bg="rgba(255, 255, 255, 0.1)"
+							boxShadow="0 4px 30px rgba(0, 0, 0, 0.1)"
+							backdropFilter="blur(10px)"
+							borderRadius="15px"
+							m={4}
+							p={6}
+							width={{ base: '100%', md: '45%' }}
+							textAlign="center"
+							transition="transform 0.3s ease, box-shadow 0.3s ease"
+							_hover={{
+								transform: 'scale(1.05)',
+								boxShadow: '0 6px 40px rgba(0, 0, 0, 0.2)',
+								cursor: 'pointer'
+							}}
+							onClick={() => handleViewProfile(service)}
+						>
+							<Image
+								src={`/images/profile-pics/${service.name.split(' ')[0].toLowerCase()}.png`}
+								alt={service.name}
+								borderRadius="full"
+								boxSize="100px"
+								mx="auto"
+								mb={4}
+							/>
+							<Text fontSize="lg" fontWeight="bold" color="white">
+								{service.name}
+							</Text>
+							<Text color="white" mb={2}>{service.service}</Text>
+							<Text fontWeight="bold" color="white">
+								${service.price}/hr
+							</Text>
+						</Box>
+					))}
+				</Flex>
+			</Box>
+
+			{selectedFreelancer && (
+				<FreelancerProfileModal
+					freelancer={selectedFreelancer}
+					isOpen={!!selectedFreelancer}
+					onClose={handleCloseModal}
+				/>
+			)}
 		</Box>
 	);
 };
