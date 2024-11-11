@@ -36,13 +36,13 @@ const Checkout = () => {
 
 	const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
-  useEffect(() => {
-    if (data && data.checkout && data.checkout.session) {
-  	stripePromise.then((stripe) => {
-  	  stripe.redirectToCheckout({ sessionId: data.checkout.session });
-  	});
-    }
-  }, [data]);
+	useEffect(() => {
+		if (data && data.checkout && data.checkout.session) {
+			stripePromise.then((stripe) => {
+				stripe.redirectToCheckout({ sessionId: data.checkout.session });
+			});
+		}
+	}, [data]);
 
 	const calculateTotal = () => {
 		return cart

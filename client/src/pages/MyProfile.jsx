@@ -1,13 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-	Box,
-	Flex,
-	Text,
-	VStack,
-	Image,
-	Button,
-} from '@chakra-ui/react';
+import { Box, Flex, Text, VStack, Image, Button } from '@chakra-ui/react';
 import Auth from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserProfile } from '../utils/redux/userSlice';
@@ -28,25 +21,27 @@ import FreelancerProfileModal from '../components/FreelancerProfileModal';
 
 const MyProfile = () => {
 	const dispatch = useDispatch();
-    const user = useSelector((state) => state.user.data);
-    const status = useSelector((state) => state.user.status);
-    const error = useSelector((state) => state.user.error);
-    const favoriteServices = useSelector((state) => state.user.favoriteServices);
-    const navigate = useNavigate();
-    const [selectedFreelancer, setSelectedFreelancer] = useState(null);
+	const user = useSelector((state) => state.user.data);
+	const status = useSelector((state) => state.user.status);
+	const error = useSelector((state) => state.user.error);
+	const favoriteServices = useSelector(
+		(state) => state.user.favoriteServices
+	);
+	const navigate = useNavigate();
+	const [selectedFreelancer, setSelectedFreelancer] = useState(null);
 
 	useEffect(() => {
 		if (status === 'idle') {
-		  dispatch(fetchUserProfile());
+			dispatch(fetchUserProfile());
 		}
-	  }, [dispatch, status]);
+	}, [dispatch, status]);
 
 	useEffect(() => {
 		if (status === 'succeeded' && !user) {
-		  navigate('/');
+			navigate('/');
 		}
 	}, [status, user, navigate]);
-	
+
 	if (status === 'loading') {
 		return (
 			<Box
@@ -60,19 +55,19 @@ const MyProfile = () => {
 			</Box>
 		);
 	}
-	
+
 	if (status === 'failed') {
 		console.log(error); // Log the error to the console
 		return (
-		  <Box
-			p={10}
-			bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
-			minH="100vh"
-		  >
-			<Text color="white" fontSize="xl" textAlign="center">
-			  Error: {error}
-			</Text>
-		  </Box>
+			<Box
+				p={10}
+				bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
+				minH="100vh"
+			>
+				<Text color="white" fontSize="xl" textAlign="center">
+					Error: {error}
+				</Text>
+			</Box>
 		);
 	}
 
@@ -101,7 +96,6 @@ const MyProfile = () => {
 			bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
 			minH="100vh"
 		>
-			
 			<VStack spacing={8} align="stretch">
 				<Flex align="center" justify="space-between" width="100%">
 					<Flex align="center">
@@ -182,29 +176,47 @@ const MyProfile = () => {
 						backdropFilter="blur(10px)"
 						mb={4}
 					>
-						<Text fontSize="xl" fontWeight="bold" mb={2} color="white">
-						    Purchase Date: {new Date(Math.floor(order.purchaseDate)).toLocaleDateString()}
+						<Text
+							fontSize="xl"
+							fontWeight="bold"
+							mb={2}
+							color="white"
+						>
+							Purchase Date:{' '}
+							{new Date(
+								Math.floor(order.purchaseDate)
+							).toLocaleDateString()}
 						</Text>
-					    {order.freelancers.map((freelancer) => {
-						    return (
-							<Box
-								key={freelancer._id}
-								bg="rgba(255, 255, 255, 0.1)"
-						        p={4}
-						        borderRadius="lg"
-						        backdropFilter="blur(10px)"
-						        mb={4}
-							>
-								<Text fontSize="lg" fontWeight="bold" color="white">
-									{freelancer.name}  
-								</Text>
-								<Text fontWeight="bold" mb={4} color="white">
-									${freelancer.price}/hr
-								</Text>
-								<Text mb={2} color="white">{freelancer.service}</Text>
-							</Box>
-						    );
-					    })}
+						{order.freelancers.map((freelancer) => {
+							return (
+								<Box
+									key={freelancer._id}
+									bg="rgba(255, 255, 255, 0.1)"
+									p={4}
+									borderRadius="lg"
+									backdropFilter="blur(10px)"
+									mb={4}
+								>
+									<Text
+										fontSize="lg"
+										fontWeight="bold"
+										color="white"
+									>
+										{freelancer.name}
+									</Text>
+									<Text
+										fontWeight="bold"
+										mb={4}
+										color="white"
+									>
+										${freelancer.price}/hr
+									</Text>
+									<Text mb={2} color="white">
+										{freelancer.service}
+									</Text>
+								</Box>
+							);
+						})}
 					</Box>
 				))}
 			</Box>
@@ -235,12 +247,14 @@ const MyProfile = () => {
 							_hover={{
 								transform: 'scale(1.05)',
 								boxShadow: '0 6px 40px rgba(0, 0, 0, 0.2)',
-								cursor: 'pointer'
+								cursor: 'pointer',
 							}}
 							onClick={() => handleViewProfile(service)}
 						>
 							<Image
-								src={`/images/profile-pics/${service.name.split(' ')[0].toLowerCase()}.png`}
+								src={`/images/profile-pics/${service.name
+									.split(' ')[0]
+									.toLowerCase()}.png`}
 								alt={service.name}
 								borderRadius="full"
 								boxSize="100px"
@@ -250,7 +264,9 @@ const MyProfile = () => {
 							<Text fontSize="lg" fontWeight="bold" color="white">
 								{service.name}
 							</Text>
-							<Text color="white" mb={2}>{service.service}</Text>
+							<Text color="white" mb={2}>
+								{service.service}
+							</Text>
 							<Text fontWeight="bold" color="white">
 								${service.price}/hr
 							</Text>
@@ -272,8 +288,8 @@ const MyProfile = () => {
 
 export default MyProfile;
 
-
-{/* <Box
+{
+	/* <Box
 			p={10}
 			mt={4}
 			bgGradient="linear(to-tl, #3AAFA9, #2B7A78)"
@@ -557,4 +573,5 @@ export default MyProfile;
 					/>
 				)}
 			</VStack>
-		</Box> */}
+		</Box> */
+}

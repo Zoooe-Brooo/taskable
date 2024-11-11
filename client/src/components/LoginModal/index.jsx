@@ -31,7 +31,7 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
-		
+
 		// Validate inputs
 		if (!formState.email || !formState.password) {
 			toast({
@@ -115,7 +115,7 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 							<Divider />
 						</HStack>
 						{/* Email Input */}
-						<FormControl mb={4}>
+						<FormControl mb={4} position="relative">
 							<FormLabel fontSize="sm" color="gray.700">
 								Email address
 							</FormLabel>
@@ -144,7 +144,13 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 							/>
 							{formState.password && (
 								<IconButton
-									icon={showPassword ? <FaEyeSlash /> : <FaEye />}
+									icon={
+										showPassword ? (
+											<FaEyeSlash />
+										) : (
+											<FaEye />
+										)
+									}
 									onClick={togglePasswordVisibility}
 									aria-label="Toggle password visibility"
 									variant="ghost"
@@ -173,7 +179,12 @@ function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 					</ModalBody>
 					<ModalFooter flexDirection="column">
 						{/* Login Button */}
-						<Button type="submit" colorScheme="teal" w="full" mb={3}>
+						<Button
+							type="submit"
+							colorScheme="teal"
+							w="full"
+							mb={3}
+						>
 							Log In
 						</Button>
 
