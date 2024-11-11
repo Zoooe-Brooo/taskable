@@ -71,11 +71,22 @@ const resolvers = {
 			  payment_method_types: ['card'],
 			  line_items,
 			  mode: 'payment',
-			  success_url: `${url}/my-profile`,
+			  success_url: `${url}/my-profile?session_id={CHECKOUT_SESSION_ID}`,
 			  cancel_url: `${url}/`,
 			});
+
+			// Save order to database
+			if (session) {
+				order.purchaseDate = new Date().toLocaleString();
+				order.sessionId = session.id;
+				await order.save();
+				await User.findByIdAndUpdate(context.user._id, {
+					$push: { orders: order },
+				});
+				return { session: session.id };
+			}
 		  
-			return { session: session.id };
+			throw new Error('Unable to create checkout session');
 		  },
 		  
 	},
