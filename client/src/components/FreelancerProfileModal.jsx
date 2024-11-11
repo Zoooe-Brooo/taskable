@@ -27,7 +27,7 @@ const FreelancerProfileModal = ({ freelancer, isOpen, onClose }) => {
   
   if (!isOpen) return null;
 
-  const isFavorite = favoriteServices.some(service => service._id === freelancer._id);
+  const isFavorite = favoriteServices?.some(service => service._id === freelancer._id);
   const firstName = freelancer.name.split(' ')[0].toLowerCase();
 
   const handleToggleFavorite = () => {
