@@ -1,6 +1,15 @@
 # Taskable
 
-Taskable is a comprehensive platform for connecting clients with skilled freelancers and developers for a wide range of tasks. This application enables users to browse, interact, and hire developers or freelancers, manage tasks, and complete secure transactions using Stripe integration.
+Taskable is a comprehensive platform for connecting clients with skilled freelancers and developers for a wide range of tasks. This application enables users to browse, interact, and hire developers or freelancers, manage tasks, and complete secure transactions using Stripe integration.|
+
+Deployed website:https://taskable.onrender.com/
+
+## Images
+
+<img width="1421" alt="Screenshot 2024-11-12 at 7 50 47 PM" src="https://github.com/user-attachments/assets/d92b27d8-63e6-44ed-9f25-7c2a4d1a090e">
+<img width="1440" alt="Screenshot 2024-11-12 at 7 51 11 PM" src="https://github.com/user-attachments/assets/f52949e8-b6d1-4c68-baf9-944770817d25">
+<img width="1134" alt="Screenshot 2024-11-12 at 7 51 18 PM" src="https://github.com/user-attachments/assets/e80870e6-79ed-4b7a-a434-8416d93af75e">
+
 
 ## Introduction
 
