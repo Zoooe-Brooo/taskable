@@ -234,7 +234,11 @@ function Header() {
 						/>
 						<MenuList>
 							<MenuItem>
-								<Link to="/my-profile" color="var(--dark)">
+								<Link
+									to="/my-profile"
+									color="var(--dark)"
+									onClick={handleProfileClick}
+								>
 									My Profile
 								</Link>
 							</MenuItem>
